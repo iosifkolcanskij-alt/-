@@ -1,0 +1,13 @@
+# Локальные секреты и данные
+api/config.local.php
+api/data/
+*.sqlite
+*.log
+
+# IDE / ОС
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Временные файлы
+tools/test.txt

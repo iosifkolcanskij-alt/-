@@ -1,0 +1,717 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Самопознание — Нумерология &amp; Психотесты</title>
+  <meta name="description" content="Нумерология по дате рождения, психологические тесты и инструменты самопознания — бесплатно, без регистрации." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/auth.css" />
+</head>
+<body data-theme="dark">
+
+  <!-- DAY SKY BACKGROUND (visible in light theme only) -->
+  <div id="day-sky" aria-hidden="true">
+    <div class="ds-sun"></div>
+    <div class="ds-cloud ds-cloud-1"></div>
+    <div class="ds-cloud ds-cloud-2"></div>
+    <div class="ds-cloud ds-cloud-3"></div>
+    <div class="ds-cloud ds-cloud-4"></div>
+    <div class="ds-cloud ds-cloud-5"></div>
+    <div class="ds-bird ds-bird-1"></div>
+    <div class="ds-bird ds-bird-2"></div>
+    <div class="ds-bird ds-bird-3"></div>
+  </div>
+
+  <aside class="side-info side-info-left" aria-hidden="true">
+    <div class="side-widget">
+      <div class="sw-title">⌚ Текущее время</div>
+      <svg viewBox="0 0 100 100" class="sw-clock-svg" aria-hidden="true">
+        <defs>
+          <radialGradient id="clockBg" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="rgba(30,40,90,0.6)"/>
+            <stop offset="100%" stop-color="rgba(10,15,50,0.3)"/>
+          </radialGradient>
+        </defs>
+        <circle cx="50" cy="50" r="47" fill="url(#clockBg)" stroke="rgba(99,102,241,0.35)" stroke-width="1.5"/>
+        <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(139,92,246,0.15)" stroke-width="1"/>
+        <line x1="50" y1="5"  x2="50" y2="12" stroke="rgba(165,180,252,0.7)" stroke-width="2" stroke-linecap="round"/>
+        <line x1="95" y1="50" x2="88" y2="50" stroke="rgba(165,180,252,0.7)" stroke-width="2" stroke-linecap="round"/>
+        <line x1="50" y1="95" x2="50" y2="88" stroke="rgba(165,180,252,0.7)" stroke-width="2" stroke-linecap="round"/>
+        <line x1="5"  y1="50" x2="12" y2="50" stroke="rgba(165,180,252,0.7)" stroke-width="2" stroke-linecap="round"/>
+        <line x1="50" y1="5" x2="50" y2="9" stroke="rgba(165,180,252,0.3)" stroke-width="1" transform="rotate(30,50,50)"/>
+        <line x1="50" y1="5" x2="50" y2="9" stroke="rgba(165,180,252,0.3)" stroke-width="1" transform="rotate(60,50,50)"/>
+        <line x1="50" y1="5" x2="50" y2="9" stroke="rgba(165,180,252,0.3)" stroke-width="1" transform="rotate(120,50,50)"/>
+        <line x1="50" y1="5" x2="50" y2="9" stroke="rgba(165,180,252,0.3)" stroke-width="1" transform="rotate(150,50,50)"/>
+        <line x1="50" y1="5" x2="50" y2="9" stroke="rgba(165,180,252,0.3)" stroke-width="1" transform="rotate(210,50,50)"/>
+        <line x1="50" y1="5" x2="50" y2="9" stroke="rgba(165,180,252,0.3)" stroke-width="1" transform="rotate(240,50,50)"/>
+        <line x1="50" y1="5" x2="50" y2="9" stroke="rgba(165,180,252,0.3)" stroke-width="1" transform="rotate(300,50,50)"/>
+        <line x1="50" y1="5" x2="50" y2="9" stroke="rgba(165,180,252,0.3)" stroke-width="1" transform="rotate(330,50,50)"/>
+        <circle cx="50" cy="7"  r="1.5" fill="rgba(255,255,255,0.8)"/>
+        <circle cx="93" cy="50" r="1.5" fill="rgba(255,255,255,0.8)"/>
+        <circle cx="50" cy="93" r="1.5" fill="rgba(255,255,255,0.8)"/>
+        <circle cx="7"  cy="50" r="1.5" fill="rgba(255,255,255,0.8)"/>
+        <line id="cw-hour"   x1="50" y1="50" x2="50" y2="22" stroke="#818cf8" stroke-width="3.5" stroke-linecap="round" transform="rotate(0,50,50)"/>
+        <line id="cw-minute" x1="50" y1="50" x2="50" y2="14" stroke="#c4b5fd" stroke-width="2.5" stroke-linecap="round" transform="rotate(0,50,50)"/>
+        <line id="cw-second" x1="50" y1="58" x2="50" y2="9"  stroke="#38bdf8" stroke-width="1.2" stroke-linecap="round" transform="rotate(0,50,50)"/>
+        <circle cx="50" cy="50" r="4"   fill="#6366f1"/>
+        <circle cx="50" cy="50" r="2"   fill="#e0e7ff"/>
+      </svg>
+      <div class="sw-time" id="cw-time-txt">--:--:--</div>
+      <div class="sw-date" id="cw-date-txt"></div>
+    </div>
+    <div class="side-widget">
+      <div class="sw-title">🌌 Созвездия месяца</div>
+      <div class="sw-constellation" id="cw-constellation">—</div>
+    </div>
+  </aside>
+
+  <aside class="side-info side-info-right" aria-hidden="true">
+    <div class="side-widget">
+      <div class="sw-title">✦ Число дня</div>
+      <div class="sw-big-num" id="dn-number">—</div>
+      <div class="sw-num-name" id="dn-name"></div>
+      <div class="sw-num-desc" id="dn-desc"></div>
+    </div>
+    <div class="side-widget">
+      <div class="sw-row">
+        <div class="sw-astro-item">
+          <div class="sw-title">Луна</div>
+          <div class="sw-astro-sym" id="dn-moon-sym">🌙</div>
+          <div class="sw-astro-name" id="dn-moon-name"></div>
+        </div>
+        <div class="sw-divider-v"></div>
+        <div class="sw-astro-item">
+          <div class="sw-title">Солнце</div>
+          <div class="sw-astro-sym" id="dn-sun-sym">☀️</div>
+          <div class="sw-astro-name" id="dn-sun-name"></div>
+        </div>
+      </div>
+    </div>
+    <div class="side-widget">
+      <div class="sw-title">📅 Сегодня</div>
+      <div class="sw-today" id="dn-today"></div>
+    </div>
+  </aside>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-inner">
+      <button class="logo" onclick="showPage('home')">
+        <span class="logo-icon">✦</span>
+        <span class="logo-text">Самопознание</span>
+      </button>
+      <button class="auth-header-btn" id="authBtn" onclick="showAuthModal()">Войти</button>
+      <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()" title="Сменить тему">
+        <span id="themeIcon">☀️</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- NAV -->
+  <nav class="nav" id="mainNav">
+    <div class="nav-inner">
+      <button class="nav-item active" data-page="home" onclick="showPage('home')">
+        <span class="nav-icon">⌂</span><span class="nav-label">Главная</span>
+      </button>
+      <button class="nav-item" data-page="numerology" onclick="showPage('numerology')">
+        <span class="nav-icon">⬡</span><span class="nav-label">Нумерология</span>
+      </button>
+      <button class="nav-item" data-page="tests" onclick="showTestsPage()">
+        <span class="nav-icon">◆</span><span class="nav-label">Тесты</span>
+      </button>
+      <button class="nav-item" data-page="zodiac" onclick="showPage('zodiac')">
+        <span class="nav-icon">♈</span><span class="nav-label">Зодиак</span>
+      </button>
+      <button class="nav-item" data-page="history" onclick="showPage('history')">
+        <span class="nav-icon">≡</span><span class="nav-label">История</span>
+      </button>
+      <button class="nav-item" data-page="profile" onclick="showPage('profile')">
+        <span class="nav-icon">👤</span><span class="nav-label">Профиль</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- HOME PAGE -->
+    <section id="page-home" class="page active">
+      <div class="hero">
+        <div class="hero-badge">✦ Инструменты самопознания</div>
+        <h1 class="hero-title">Узнай себя глубже</h1>
+        <p class="hero-sub">Нумерология по дате рождения, психологические тесты и познавательные статьи — несколько подходов к пониманию своей личности. Бесплатно, без регистрации, без отправки данных.</p>
+        <div class="hero-actions">
+          <button class="btn btn-hero" onclick="showPage('numerology')">Начать с нумерологии</button>
+          <button class="btn btn-hero-outline" onclick="document.getElementById('homeToolsSection').scrollIntoView({behavior:'smooth'})">Узнать подробнее ↓</button>
+        </div>
+        <div class="hero-glow"></div>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-item"><div class="stat-num">10</div><div class="stat-label">Тестов</div></div>
+        <div class="stat-item"><div class="stat-num">150+</div><div class="stat-label">Вопросов</div></div>
+        <div class="stat-item"><div class="stat-num">16</div><div class="stat-label">Типов MBTI</div></div>
+        <div class="stat-item"><div class="stat-num">24</div><div class="stat-label">Знаков зодиака</div></div>
+      </div>
+
+      <div class="home-section" id="homeToolsSection">
+        <div class="home-section-label">Инструменты</div>
+        <h2 class="home-section-title">С чего начать?</h2>
+        <div class="tools-grid">
+          <div class="tool-section" onclick="showPage('numerology')" style="cursor:pointer">
+            <div class="tool-icon-wrap amber"><span class="tool-icon">⬡</span></div>
+            <div class="tool-body">
+              <div class="tool-name">Нумерология</div>
+              <div class="tool-desc">Число жизненного пути, матрица Пифагора, кармические числа — по дате рождения</div>
+            </div>
+          </div>
+          <div class="tool-section" onclick="showTestsPage()" style="cursor:pointer">
+            <div class="tool-icon-wrap indigo"><span class="tool-icon">◆</span></div>
+            <div class="tool-body">
+              <div class="tool-name">Психологические тесты</div>
+              <div class="tool-desc">MBTI, Big Five, темперамент, эмоциональный интеллект, эннеаграмма и другие</div>
+            </div>
+          </div>
+          <div class="tool-section" onclick="showPage('zodiac')" style="cursor:pointer">
+            <div class="tool-icon-wrap gold"><span class="tool-icon">♈</span></div>
+            <div class="tool-body">
+              <div class="tool-name">Знаки Зодиака</div>
+              <div class="tool-desc">Западный и китайский гороскопы по дате рождения</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="home-section" id="whatIsSection">
+        <div class="home-section-label">О сервисе</div>
+        <h2 class="home-section-title">Что такое Самопознание?</h2>
+        <div id="whatIsContent"></div>
+      </div>
+
+      <div class="home-section" id="howItWorksSection">
+        <div class="home-section-label">Как это работает</div>
+        <h2 class="home-section-title">Три простых шага</h2>
+        <div class="steps-row">
+          <div class="step-item">
+            <div class="step-num">01</div>
+            <div class="step-icon">📅</div>
+            <div class="step-title">Введите данные</div>
+            <div class="step-desc">Дата рождения для нумерологии и зодиака или выберите тест</div>
+          </div>
+          <span class="step-arrow">→</span>
+          <div class="step-item">
+            <div class="step-num">02</div>
+            <div class="step-icon">✦</div>
+            <div class="step-title">Получите результат</div>
+            <div class="step-desc">Расчёт или интерпретация по выбранному методу</div>
+          </div>
+          <span class="step-arrow">→</span>
+          <div class="step-item">
+            <div class="step-num">03</div>
+            <div class="step-icon">≡</div>
+            <div class="step-title">Сохраните в истории</div>
+            <div class="step-desc">Локально или в аккаунте — сравнивайте результаты со временем</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="home-section" id="faqSection">
+        <div class="home-section-label">FAQ</div>
+        <h2 class="home-section-title">Частые вопросы</h2>
+        <div id="faqContent"></div>
+      </div>
+
+      <div class="privacy-strip" id="privacyStrip">
+        <div class="ps-row" id="privacyContent"></div>
+      </div>
+
+      <div class="home-section" style="margin-top:40px">
+        <div class="home-section-label">Справочник</div>
+        <h2 class="home-section-title" style="font-size:22px">Подробные материалы для самообразования</h2>
+        <p class="page-sub" style="margin-top:8px;text-align:left">Ниже — развёрнутые тексты по нумерологии, типам личности и психологии.</p>
+      </div>
+
+      <div class="home-section ref-anchor" id="ref-osnovy" style="margin-top:36px">
+        <div class="home-section-label">Раздел A</div>
+        <h3 class="home-section-title" style="font-size:26px">Основы самопознания и ключевые термины</h3>
+        <div class="what-is-card">
+          <div class="what-is-text ref-prose">
+            <p><strong>Личность</strong> в разговорной психологии — устойчивые паттерны мышления, эмоций и поведения, которые задают ваш «стиль» в отношениях, работе и стрессе.</p>
+            <p><strong>Черта личности (trait)</strong> — измеряемое свойство «на сколько»: например высокая или низкая добросовестность. Такие качества описывают статистический профиль человека по сравнению с большой выборкой.</p>
+            <p><strong>Темперамент</strong> — биологический «стартовый режим»: скорость нервной системы, восстановление, типичная амплитуда реакции. Он отличается от набора усвоенных <strong>навыков</strong> общения и самоконтроля, которые можно тренировать поверх биологической основы.</p>
+            <p><strong>Тип (в проективном смысле)</strong>, как MBTI или архетип, — упрощающее имя набора повторяющихся стратегий. Удобно для саморефлексии, но любой живой человек шире трёх-четырёх букв типа опросника.</p>
+            <p><strong>Валидность</strong> — отвечает ли тест действительно на тот измеритель вопрос, который автор заявляет. <strong>Надёжность</strong> — насколько стабильны результаты при повторении и одинаково ли понимают формулировки разные люди.</p>
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="home-section ref-anchor" id="ref-numerologiya" style="margin-top:36px">
+        <div class="home-section-label">Раздел B</div>
+        <h3 class="home-section-title" style="font-size:26px">Нумерология и психоматрица как справочный язык</h3>
+        <div class="ref-two-col">
+          <div class="glass-card" style="padding:20px 22px">
+            <div class="section-title" style="margin-bottom:10px">Как читать психоматрицу буквально</div>
+            <div class="ref-prose">
+              <p>Ряд чисел из полной запиши даты рождения (вместе с ведущими нулями) заполняет квадрат 3×3. Если цифра встретилась <em>n</em> раз, говорят о «работе качества»: ноль — возможный дефицит опыта, единица-двойка — умеренно, многократность — акцент. Линии (горизонтали/вертикали/диагонали) агрегируют силы в «цели», «семье», «логике» и других блоках приложения.</p>
+            </div>
+          </div>
+          <div class="glass-card" style="padding:20px 22px">
+            <div class="section-title" style="margin-bottom:10px">Числа дополнений</div>
+            <div class="ref-prose">
+              <p>Четыре рабочих числа суммируют и редуцируют ряд базовой даты, чтобы добавить временный «накопленный ресурс». Не смешивают нумерацию дорожной и ипотечной калькуляции: это символический слой описания человека тем же языком, что и литература по Александровой традиции в России.</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="ref-prose tool-note">Нумерологические символики не предсказывают конкретные события; они упорядочивают разговор человека про себя. Для работы со страхом, травмами и зависимостями нужен живой профессионал.</div>
+      </div>
+
+      <div class="home-section ref-anchor" id="ref-temperament" style="margin-top:36px">
+        <div class="home-section-label">Раздел C</div>
+        <h3 class="home-section-title" style="font-size:26px">Темперамент: справочник по четырём типам и типичным паттернам</h3>
+        <div class="compare-grid">
+          <div class="compare-card compare-amber">
+            <div class="cc-emoji">🔥</div>
+            <div class="cc-title">Холерик</div>
+            <div class="cc-type">быстрый отклик, высокое напряжение</div>
+            <div class="cc-text">Мобилизация ресурсов «быстро». Риск преждевременного выгорания; сильнее работают режим охлаждения, физический сон, ограничение параллельных проектов. В управлении — прямота, возможны резкие коррекции курса.</div>
+            <div class="cc-for">Полезное правило — «сначала дыхание, затем текст» перед жёстким разговором</div>
+          </div>
+          <div class="compare-card compare-amber">
+            <div class="cc-emoji">☀️</div>
+            <div class="cc-title">Сангвиник</div>
+            <div class="cc-type">пластичность, коммуникация</div>
+            <div class="cc-text">Быстро перестраивает внимание, ценит динамику. Риск — поверхность внимательности там, где надо методичность. Выигрывает от чеклистов и ретроспектив, чтобы допилить финальные проценты.</div>
+            <div class="cc-for">Сочетание «игра формата» + «закрытие хвостов» каждую неделю</div>
+          </div>
+          <div class="compare-card compare-blue">
+            <div class="cc-emoji">🧊</div>
+            <div class="cc-title">Флегматик</div>
+            <div class="cc-type">долговременная ровность</div>
+            <div class="cc-text">Медленный выход на плато, затем железное выносливое удержание. Риск затягивания старта. Важно внешнее «нарезание» задач маленькими шагами — иначе копится недосказанное.</div>
+            <div class="cc-for">Таймеры Помидора / чёткая микро-сегментация</div>
+          </div>
+          <div class="compare-card compare-purple">
+            <div class="cc-emoji">🌙</div>
+            <div class="cc-title">Меланхолик</div>
+            <div class="cc-type">чувствительность, самоуглублённость</div>
+            <div class="cc-text">Глубокая обработка сигналов, трудности с многозадачностью в шуме. Выигрывают одиночество и структурированный творческий режим без хаота. Полезно называть чувство словами, не запирая только в себе.</div>
+            <div class="cc-for">Дневник эмоций + «безопасный друг» без обесценивания</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="home-section ref-anchor" id="ref-mbti-i-bigfive" style="margin-top:36px">
+        <div class="home-section-label">Раздел D</div>
+        <h3 class="home-section-title" style="font-size:26px">MBTI и «Большая пятёрка»: как они дополняют друг друга</h3>
+        <div class="what-is-card">
+          <div class="ref-prose">
+            <p><strong>MBTI</strong> упаковывает вас в четыре литеры; привычен в HR и командных ретритах.</p>
+            <p><strong>Big Five (OCEAN)</strong>: <em>O</em>penness — любопытство к абстрактному; <em>C</em>onscientiousness — самоорганизация и контроль; <em>E</em>xtraversion — социальный заряд; <em>A</em>greeableness — сотрудничество и мягкость; <em>N</em>euroticism — чувствительность негатива стресса (не синоним болезни, а шкала напряженности).</p>
+            <p>Если MBTI кажется узким, смотрите OCEAN: он отвечает «на сколько». Если шкалы слишком абстрактны, MBTI даёт понятную метафору стиля решений.</p>
+          </div>
+        </div>
+        <div class="home-ref-mini-title">16 типов MBTI — памятка-набросок одной строкой каждому</div>
+        <div class="ref-two-col">
+          <div class="glass-card ref-prose dense-mbti-list">
+            <p><strong>INTJ</strong> архитектор стратегий · <strong>INTP</strong> конструктор концептов · <strong>ENTJ</strong> режиссёр результатов · <strong>ENTP</strong> идеатор дебатов</p>
+            <p><strong>INFJ</strong> смысл и рост других · <strong>INFP</strong> чуткость ценностей · <strong>ENFJ</strong> вдохновляющий наставник · <strong>ENFP</strong> генератор возможностей</p>
+            <p><strong>ISTJ</strong> опора процедур · <strong>ISFJ</strong> забота через стабильность · <strong>ESTJ</strong> организация людей под цель · <strong>ESFJ</strong> тёплый связующий</p>
+            <p><strong>ISTP</strong> решение руками/фактом · <strong>ISFP</strong> живой эстет · <strong>ESTP</strong> тактический драйвер · <strong>ESFP</strong> здесь и сейчас</p>
+            <p class="tool-note" style="margin-top:14px;margin-bottom:0">Тип описывает среднюю любимую стратегию, но не ограничивает обучение обратному навыку.</p>
+          </div>
+          <div class="glass-card ref-prose">
+            <strong>Откуда брать недостающее:</strong><br/>
+            Низкая добросовестность → тренировать внешние дедлайны и «рабочее окно без отвлечений». Высокий невротизм → режим базовых нужд телом и микродыхание; не стыд, а объект данных. Экстравертам полезнее уединённые ретрофиты, интровертам — структурированное «наружное» время маленькими дозами.
+          </div>
+        </div>
+      </div>
+
+      <div class="home-section ref-anchor" id="ref-otnosheniya-i-regulyaciya" style="margin-top:36px">
+        <div class="home-section-label">Раздел E</div>
+        <h3 class="home-section-title" style="font-size:26px">Близость, эмоции и чувство контроля над жизнью</h3>
+        <div class="compare-grid">
+          <div class="compare-card compare-purple">
+            <div class="cc-emoji">💞</div>
+            <div class="cc-title">Стиль привязанности</div>
+            <div class="cc-type">как включаются стратегии в отношениях</div>
+            <div class="cc-text">Опросники обычно выделяют безопасные, тревожные или избегающие тенденции как привычные ответы на близость. Это про повторяющиеся сценарии, а не «навсегда болен». Терапия и осознанные диалогы меняют устойчивые циклы медленнее, но уверенно.</div>
+          </div>
+          <div class="compare-card compare-blue">
+            <div class="cc-emoji">🎭</div>
+            <div class="cc-title">Эмоциональный интеллект</div>
+            <div class="cc-type">навыковый слой над темпераментом</div>
+            <div class="cc-text">Распознавание чувства, именование без обвинений, торможение перед ответной реакцией, эмпатия к себе первично как к любому члену семьи. Тренируется практическими упражнениями, журналингом коротких циклов и обратной связью доверенных людей.</div>
+          </div>
+          <div class="compare-card compare-amber">
+            <div class="cc-emoji">🎯</div>
+            <div class="cc-title">Локус контроля</div>
+            <div class="cc-type">субъективное «кто главный над моими исходами»</div>
+            <div class="cc-text">Внешний локус — чаще восприятие удачи/внешних сил как определяющих. Внутренний — упор на собственную агентность. Обе точки нужны модерации: брать ответственность там, где она есть, признавать системные ограничения там, где их нельзя желанием победить.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="home-section ref-anchor" id="ref-kachestvo" style="margin-top:36px">
+        <div class="home-section-label">Раздел F</div>
+        <h3 class="home-section-title" style="font-size:26px">Качество психометрии: что любой справочник обязан сказать</h3>
+        <div class="what-is-card">
+          <div class="ref-prose">
+            <p>Самодиагностика никогда не заменит клиническую беседу. Онлайн-опросы дают язык наблюдений или пересекаются с литературой, но <strong>не ставят диагноз по МКБ/DSM без врача</strong>.</p>
+            <p><strong>Честность ответа</strong> — главный вклад человека в точность. Социальная желательность (хотеть быть «правильнее» для опросника) завышает «хорошие» черты или скрывает дискомфорт.</p>
+            <p><strong>Язык перевода;</strong> бесплатное приложение упрощают формулировки до читаемого размера. Это добавляет понятность, но снижает сравнимость результата с академической нормализацией исходного инструмента.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="home-section ref-anchor" id="ref-goroskopy-disclaimer" style="margin-top:36px">
+        <div class="home-section-label">Раздел F</div>
+        <h3 class="home-section-title" style="font-size:26px">Гороскопы в справочнике: символический слой, не инструкция к жизни</h3>
+        <div class="ref-two-col">
+          <div class="glass-card ref-prose"><strong>Западная астрология</strong> задаёт узнаваемые архетипы и разговоры о стихии/планете. Исторические корни смешивают наблюдения неба и культурные нарративы. Современному человеку полезнее честно понимать, что символические тексты поддерживают исследование ценности, но не управляют физическими законами мира.</div>
+          <div class="glass-card ref-prose"><strong>Китайский шэнсяо</strong> задаёт животное года и элемент в 60-летнем цикле. Здесь важна культурная грамотность: относиться почтительно, не превращать в шутку чужое наследство. Интерпретации в приложении — развлекательно-полезный словарь описаний, а не указание искать любовь только среди тех, кто «совместим».</div>
+        </div>
+      </div>
+
+      
+
+      <div class="home-section ref-anchor" id="ref-glossary" style="margin-top:36px">
+        <div class="home-section-label">Раздел G</div>
+        <h3 class="home-section-title" style="font-size:26px">Глоссарий общих понятий</h3>
+        <div class="faq-list">
+          <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">Аффект регуляция <span class="faq-arrow">▾</span></div><div class="faq-a">Способ управлять силой и длительностью переживаемых эмоций: от переименования чувства до физической стабилизации дыхания/тела и отсроченного решения проблемного письма.</div></div>
+          <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">Якорное убеждение (core belief) <span class="faq-arrow">▾</span></div><div class="faq-a">Глубокие правила вроде «меня недостаточно» или «мир всегда капризен», которые окрашивают интерпретации событий. Они могут поддерживаться травмами, но поддаются изменению в терапии КПТ-семейства и опыте новых маленьких успехов.</div></div>
+          <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">Социальная желательность <span class="faq-arrow">▾</span></div><div class="faq-a">Склонность отвечать «правильнее» себя вместо честнее. Ухудшает совпадение результата с реальными повторяющимися реакциями.</div></div>
+          <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">Самореференция Даннинга–Крюгера <span class="faq-arrow">▾</span></div><div class="faq-a">Низкая объективность оценивает свой навык выше экспертности; эксперты недооценивают свой уровень. Наблюдайте паттерны внешней обратной связи, а не один тест без контекста.</div></div>
+          <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">Петля руминации <span class="faq-arrow">▾</span></div><div class="faq-a">Кручение проблемами без действия усиливает тревогу. Лечится не только «остановиться думать», а конкретной подстановкой микрозадачи, физической сменой среды или заземления.</div></div>
+          <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">Перегруз принятия решений <span class="faq-arrow">▾</span></div><div class="faq-a">Когда утомляет даже маленький выбор из-за длинного потока задач за день. Темперамент J/P и черта добросовестности здесь смешиваются с реальной усталостью режима работы.</div></div>
+          <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">Кохерентность / интеграция личности <span class="faq-arrow">▾</span></div><div class="faq-a">Ощущение, что ваши истории про себя, ценности и поступки согласованы хотя бы в больших чертах, а не воюют между собой. Не финальное состояние, а тренируемый навык наблюдений за ценностными компромиссами.</div></div>
+        </div>
+      </div>
+
+      <div class="home-section ref-anchor" id="ref-bibliografiya" style="margin-top:36px">
+        <div class="home-section-label">Раздел H</div>
+        <h3 class="home-section-title" style="font-size:26px">Имена и направления, на которые можно опереться дальше</h3>
+        <div class="ref-prose glass-card">
+          <p><strong>Карл Юнг</strong> про типирование восприятия и символический язык архетипов; связь традиции типологий с литературой и искусством.</p>
+          <p><strong>Изабель Бриггс Майерс и Катарина Бриггс</strong> адаптировали эвристический опрос для коммуницирования профессиональных различий; MBTI многими академическими школами воспринимается со скепсисом, но сохраняет практическую популярность.</p>
+          <p><strong>Модель «Большой пятёрки»</strong> — широкий консенсус личностной психологии о структуре черт (часто связывают с Costa и McCrae и развитием лексической гипотезы Allport и Odbert середины XX века).</p>
+          <p><strong>Джон Боулби и Мэри Эйнсуорт</strong> исследовали привязанность между младенцем и значимым другом как основу более поздней теории паттернов взрослых отношений.</p>
+          <p style="margin-top:12px;color:var(--text-dim);font-size:14px">Список упрощён и не содержит ссылок — это отправная точка для самостоятельного образования через учебники психологии личности и лицензированные курсы.</p>
+        </div>
+      </div>
+
+      <div class="home-section ref-anchor" id="ref-chavo-dop" style="margin-top:36px">
+        <div class="home-section-label">Раздел I</div>
+        <h3 class="home-section-title" style="font-size:26px">Дополнительные вопросы для справочника</h3>
+        <div class="faq-list">
+          <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">Почему нельзя вводить дату будущего? <span class="faq-arrow">▾</span></div><div class="faq-a">День рождения по определению уже произошёл. Будущие даты противоречат логике расчётов и приводят к бессмысленным текстам «про вашу уже родившуюся личность».</div></div>
+          <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">Можно ли пройти тест дважды в один день? <span class="faq-arrow">▾</span></div><div class="faq-a">Можно, но второй результат полезнее смотреть как «режим утро/настроение вечера», а не как новое «Я навсегда». Для наблюдений сохраняйте оба в истории с пометкой контекста.</div></div>
+          <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">Как объяснить близким, зачем вы читаете этот справочник? <span class="faq-arrow">▾</span></div><div class="faq-a">Так: «я учусь называть свои реакции и разбирать, какие из них привычки, а какие — телесные или стрессовые». Это снижает обвинение друг друга в «оправданиях».</div></div>
+          <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">Когда пора к терапевту, а не к тесту? <span class="faq-arrow">▾</span></div><div class="faq-a">Если переживания мешают работе, сну, питанию, отношениям дольше нескольких недель; если есть мысли о причинении вреда себе или другим; если вы чувствуете, что «не справляюсь» — обратитесь к специалисту очно или по телефону доверия в вашем регионе.</div></div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- NUMEROLOGY PAGE -->
+    <section id="page-numerology" class="page">
+      <div class="page-header">
+        <h2 class="page-title"><span class="title-icon amber">⬡</span> Нумерология</h2>
+        <p class="page-sub">Введите дату рождения для расчёта нумерологических показателей</p>
+      </div>
+      <div class="glass-card">
+        <label class="field-label">Дата рождения</label>
+        <div class="input-row">
+          <input type="text" id="numDateInput" class="input-field" placeholder="ДД.ММ.ГГГГ" maxlength="10"
+            oninput="formatDateInput(this)" onkeydown="if(event.key==='Enter') calcNumerology()" />
+          <button class="btn btn-primary" onclick="calcNumerology()">Рассчитать</button>
+        </div>
+        <p class="input-hint">Например: 15.03.1992</p>
+        <div id="numError" class="error-msg" style="display:none"></div>
+      </div>
+      <div id="numResult" style="display:none"></div>
+    </section>
+
+    <!-- TESTS PAGE -->
+    <section id="page-tests" class="page">
+      <div class="page-header" id="testsPageHeader">
+        <h2 class="page-title"><span class="title-icon blue">◆</span> Тесты</h2>
+        <p class="page-sub">Выберите тест для глубокого самоанализа</p>
+      </div>
+
+      <div id="testsHub" class="tests-hub">
+        <button type="button" class="test-card test-card-amber" onclick="openTestPanel('temperament')">
+          <span class="test-card-icon">◈</span>
+          <span class="test-card-title">Темперамент</span>
+          <span class="test-card-desc">20 вопросов о реакциях и поведении — 4 типа по Гиппократу</span>
+        </button>
+        <button type="button" class="test-card test-card-blue" onclick="openTestPanel('mbti')">
+          <span class="test-card-icon">◉</span>
+          <span class="test-card-title">MBTI</span>
+          <span class="test-card-desc">35 вопросов — 16 типов личности по Юнгу и Майерс-Бриггс</span>
+        </button>
+        <button type="button" class="test-card test-card-green" onclick="openTestPanel('bigfive')">
+          <span class="test-card-icon">🧩</span>
+          <span class="test-card-title">Big Five (OCEAN)</span>
+          <span class="test-card-desc">25 вопросов — 5 факторов личности</span>
+        </button>
+        <button type="button" class="test-card test-card-rose" onclick="openTestPanel('attachment')">
+          <span class="test-card-icon">💞</span>
+          <span class="test-card-title">Стиль привязанности</span>
+          <span class="test-card-desc">Как вы строите близость в отношениях</span>
+        </button>
+        <button type="button" class="test-card test-card-teal" onclick="openTestPanel('eq')">
+          <span class="test-card-icon">🎭</span>
+          <span class="test-card-title">Эмоциональный интеллект</span>
+          <span class="test-card-desc">Осознавание эмоций, эмпатия и саморегуляция</span>
+        </button>
+        <button type="button" class="test-card test-card-slate" onclick="openTestPanel('locus')">
+          <span class="test-card-icon">🎯</span>
+          <span class="test-card-title">Локус контроля</span>
+          <span class="test-card-desc">Верите ли вы в успех как в результат усилий или удачи</span>
+        </button>
+        <button type="button" class="test-card test-card-purple" onclick="openExtendedTestPanel('enneagram')">
+          <span class="test-card-icon">🔵</span>
+          <span class="test-card-title">Эннеаграмма</span>
+          <span class="test-card-desc">18 вопросов — 9 архетипов мотивации и стратегий поведения</span>
+        </button>
+        <button type="button" class="test-card test-card-rose" onclick="openExtendedTestPanel('lovelang')">
+          <span class="test-card-icon">💝</span>
+          <span class="test-card-title">Языки любви</span>
+          <span class="test-card-desc">10 вопросов — как вы выражаете и получаете любовь и заботу</span>
+        </button>
+        <button type="button" class="test-card test-card-green" onclick="openExtendedTestPanel('selfesteem')">
+          <span class="test-card-icon">🌱</span>
+          <span class="test-card-title">Самооценка Розенберга</span>
+          <span class="test-card-desc">10 утверждений — классическая шкала самооценки личности</span>
+        </button>
+        <button type="button" class="test-card test-card-pink" onclick="openTestPanel('humor')">
+          <span class="test-card-icon">😄</span>
+          <span class="test-card-title">Шуточный тест</span>
+          <span class="test-card-desc">6 блоков по 5 вопросов — узнайте, кто вы на самом деле</span>
+        </button>
+      </div>
+
+      <div id="test-panel-temperament" class="test-panel" style="display:none">
+        <button type="button" class="test-back-btn" onclick="backToTestsHub()">← К списку тестов</button>
+        <div class="test-panel-intro">
+          <h3 class="test-panel-title"><span class="title-icon amber">◈</span> Тест темперамента</h3>
+          <p class="test-panel-sub">20 вопросов о ваших реакциях, эмоциях и поведении</p>
+        </div>
+        <div id="tempTest"></div>
+        <div id="tempResult" style="display:none"></div>
+      </div>
+      <div id="test-panel-mbti" class="test-panel" style="display:none">
+        <button type="button" class="test-back-btn" onclick="backToTestsHub()">← К списку тестов</button>
+        <div class="test-panel-intro">
+          <h3 class="test-panel-title"><span class="title-icon blue">◉</span> Тест MBTI</h3>
+          <p class="test-panel-sub">35 вопросов для определения типа личности по методике Майерс-Бриггс</p>
+        </div>
+        <div id="mbtiTest"></div>
+        <div id="mbtiResult" style="display:none"></div>
+      </div>
+      <div id="test-panel-bigfive" class="test-panel" style="display:none">
+        <button type="button" class="test-back-btn" onclick="backToTestsHub()">← К списку тестов</button>
+        <div class="test-panel-intro">
+          <h3 class="test-panel-title"><span class="title-icon" style="background:rgba(16,185,129,0.15);color:#10b981">🧩</span> Большая пятёрка (OCEAN)</h3>
+          <p class="test-panel-sub">20 утверждений — оцените, насколько они с вами согласуются</p>
+        </div>
+        <div id="bfTest"></div>
+        <div id="bfResult" style="display:none"></div>
+      </div>
+      <div id="test-panel-attachment" class="test-panel" style="display:none">
+        <button type="button" class="test-back-btn" onclick="backToTestsHub()">← К списку тестов</button>
+        <div class="test-panel-intro">
+          <h3 class="test-panel-title"><span class="title-icon" style="background:rgba(236,72,153,0.15);color:#ec4899">💞</span> Стиль привязанности</h3>
+          <p class="test-panel-sub">12 вопросов о близости и отношениях</p>
+        </div>
+        <div id="attTest"></div>
+        <div id="attResult" style="display:none"></div>
+      </div>
+      <div id="test-panel-eq" class="test-panel" style="display:none">
+        <button type="button" class="test-back-btn" onclick="backToTestsHub()">← К списку тестов</button>
+        <div class="test-panel-intro">
+          <h3 class="test-panel-title"><span class="title-icon" style="background:rgba(20,184,166,0.15);color:#14b8a6">🎭</span> Эмоциональный интеллект</h3>
+          <p class="test-panel-sub">15 вопросов о понимании себя и других</p>
+        </div>
+        <div id="eqTest"></div>
+        <div id="eqResult" style="display:none"></div>
+      </div>
+      <div id="test-panel-locus" class="test-panel" style="display:none">
+        <button type="button" class="test-back-btn" onclick="backToTestsHub()">← К списку тестов</button>
+        <div class="test-panel-intro">
+          <h3 class="test-panel-title"><span class="title-icon" style="background:rgba(100,116,139,0.2);color:#94a3b8">🎯</span> Локус контроля</h3>
+          <p class="test-panel-sub">10 вопросов — насколько вы ощущаете контроль над событиями</p>
+        </div>
+        <div id="locusTest"></div>
+        <div id="locusResult" style="display:none"></div>
+      </div>
+      <div id="test-panel-enneagram" class="test-panel" style="display:none">
+        <button type="button" class="test-back-btn" onclick="backToTestsHub()">← К списку тестов</button>
+        <div class="test-panel-intro">
+          <h3 class="test-panel-title"><span class="title-icon" style="background:rgba(99,102,241,0.15);color:#818cf8">🔵</span> Эннеаграмма</h3>
+          <p class="test-panel-sub">18 утверждений — оцените, насколько каждое описывает вас</p>
+        </div>
+        <div id="ennTest"></div>
+        <div id="ennResult" style="display:none"></div>
+      </div>
+      <div id="test-panel-lovelang" class="test-panel" style="display:none">
+        <button type="button" class="test-back-btn" onclick="backToTestsHub()">← К списку тестов</button>
+        <div class="test-panel-intro">
+          <h3 class="test-panel-title"><span class="title-icon" style="background:rgba(236,72,153,0.15);color:#f472b6">💝</span> Языки любви</h3>
+          <p class="test-panel-sub">10 вопросов — выберите вариант, который важнее для вас</p>
+        </div>
+        <div id="llTest"></div>
+        <div id="llResult" style="display:none"></div>
+      </div>
+      <div id="test-panel-selfesteem" class="test-panel" style="display:none">
+        <button type="button" class="test-back-btn" onclick="backToTestsHub()">← К списку тестов</button>
+        <div class="test-panel-intro">
+          <h3 class="test-panel-title"><span class="title-icon" style="background:rgba(16,185,129,0.15);color:#34d399">🌱</span> Самооценка Розенберга</h3>
+          <p class="test-panel-sub">10 утверждений — оцените своё согласие с каждым</p>
+        </div>
+        <div id="seTest"></div>
+        <div id="seResult" style="display:none"></div>
+      </div>
+
+      <!-- HUMOR TEST PANEL -->
+      <div id="test-panel-humor" class="test-panel" style="display:none">
+        <button type="button" class="test-back-btn" onclick="backToTestsHub()">← К списку тестов</button>
+        <div class="test-panel-intro">
+          <h3 class="test-panel-title"><span class="title-icon" style="background:rgba(236,72,153,0.15);color:#f472b6">😄</span> Шуточный тест</h3>
+          <p class="test-panel-sub">6 блоков по 5 вопросов. На каждый вопрос ответьте «Да» или «Нет». Результат блока определяется большинством ответов.</p>
+        </div>
+        <div id="humorTest"></div>
+      </div>
+    </section>
+
+    <!-- ZODIAC PAGE -->
+    <section id="page-zodiac" class="page">
+      <div class="page-header">
+        <h2 class="page-title"><span class="title-icon" style="background:rgba(251,191,36,0.15);color:#fbbf24">♈</span> Знаки Зодиака</h2>
+        <p class="page-sub">Западный гороскоп и Китайский гороскоп (Шэнсяо) по дате рождения</p>
+      </div>
+      <div class="glass-card">
+        <label class="field-label">Дата рождения</label>
+        <div class="input-row">
+          <input type="text" id="zodiacDateInput" class="input-field" placeholder="ДД.ММ.ГГГГ" maxlength="10"
+            oninput="formatDateInput(this)" onkeydown="if(event.key==='Enter') calcZodiac()" />
+          <button class="btn btn-primary" onclick="calcZodiac()">Определить</button>
+        </div>
+        <p class="input-hint">Например: 15.03.1992</p>
+        <div id="zodiacError" class="error-msg" style="display:none"></div>
+      </div>
+      <div class="home-section">
+        <div class="home-section-label">Западный зодиак</div>
+        <h3 class="home-section-title" style="font-size:18px">12 знаков западного гороскопа</h3>
+        <div id="zodiacAllSigns" class="zodiac-grid"></div>
+      </div>
+      <div class="home-section">
+        <div class="home-section-label">Китайский гороскоп</div>
+        <h3 class="home-section-title" style="font-size:18px">12 животных Шэнсяо</h3>
+        <div id="chineseAllSigns" class="zodiac-grid"></div>
+      </div>
+      <div id="zodiacResult" style="display:none"></div>
+    </section>
+
+    <!-- HISTORY PAGE -->
+    <section id="page-history" class="page">
+      <div class="page-header">
+        <h2 class="page-title"><span class="title-icon" style="background:rgba(139,92,246,0.15);color:#a78bfa">≡</span> История</h2>
+        <p class="page-sub">Все ваши результаты сохраняются здесь</p>
+      </div>
+      <div id="historyContent"></div>
+    </section>
+
+    <!-- PROFILE PAGE -->
+    <section id="page-profile" class="page">
+      <div class="page-header">
+        <h2 class="page-title"><span class="title-icon" style="background:rgba(16,185,129,0.15);color:#10b981">👤</span> Мой профиль</h2>
+        <p class="page-sub">Личная карточка с портретом личности на основе всех пройденных тестов</p>
+      </div>
+      <div id="profileContent"></div>
+    </section>
+
+  </main>
+
+  <!-- AUTH MODAL -->
+  <div id="authModal" class="auth-modal-overlay" style="display:none" role="dialog" aria-modal="true" aria-labelledby="authModalTitle">
+    <div class="auth-modal-inner">
+      <button type="button" class="auth-modal-close" onclick="hideAuthModal()" aria-label="Закрыть">✕</button>
+      <div class="auth-modal-head">
+        <div class="auth-modal-logo">✦</div>
+        <h2 id="authModalTitle" class="auth-modal-title">Вход в аккаунт</h2>
+        <p class="auth-modal-sub">Синхронизация истории тестов между устройствами</p>
+      </div>
+      <div class="auth-tabs" id="authTabs">
+        <button type="button" class="auth-tab active" data-tab="login" onclick="switchAuthTab('login')">Вход</button>
+        <button type="button" class="auth-tab" data-tab="register" onclick="switchAuthTab('register')">Регистрация</button>
+      </div>
+      <p id="authError" class="auth-error" role="alert"></p>
+      <p id="authSuccess" class="auth-success" role="status"></p>
+      <form id="loginForm" class="auth-form" onsubmit="event.preventDefault();submitLogin()">
+        <label class="field-label" for="loginEmail">Email</label>
+        <input type="email" id="loginEmail" class="input-field auth-input" placeholder="you@example.com" autocomplete="email" required />
+        <label class="field-label" for="loginPassword">Пароль</label>
+        <input type="password" id="loginPassword" class="input-field auth-input" autocomplete="current-password" required />
+        <button type="submit" class="btn btn-primary auth-submit">Войти</button>
+        <button type="button" class="auth-link-btn" onclick="switchAuthTab('forgot')">Забыли пароль?</button>
+      </form>
+      <form id="registerForm" class="auth-form" style="display:none" onsubmit="event.preventDefault();submitRegister()">
+        <label class="field-label" for="regUsername">Логин</label>
+        <input type="text" id="regUsername" class="input-field auth-input" pattern="[a-zA-Z0-9_]{3,30}" autocomplete="username" required />
+        <label class="field-label" for="regName">Имя</label>
+        <input type="text" id="regName" class="input-field auth-input" autocomplete="name" />
+        <label class="field-label" for="regEmail">Email</label>
+        <input type="email" id="regEmail" class="input-field auth-input" autocomplete="email" required />
+        <label class="field-label" for="regPassword">Пароль (от 8 символов)</label>
+        <input type="password" id="regPassword" class="input-field auth-input" minlength="8" autocomplete="new-password" required />
+        <button type="submit" class="btn btn-primary auth-submit">Зарегистрироваться</button>
+        <p class="auth-hint">На почту придёт ссылка для подтверждения</p>
+      </form>
+      <div id="verifyPendingForm" class="auth-form auth-form-center" style="display:none">
+        <div class="auth-pending-icon">📧</div>
+        <p class="auth-pending-text">Письмо на <strong id="verifyPendingEmail"></strong>. Перейдите по ссылке, затем войдите.</p>
+        <button type="button" class="btn btn-secondary auth-submit" onclick="submitResendVerification()">Отправить снова</button>
+        <button type="button" class="auth-link-btn" onclick="switchAuthTab('login')">Уже подтвердил — войти</button>
+      </div>
+      <form id="forgotForm" class="auth-form" style="display:none" onsubmit="event.preventDefault();submitForgotPassword()">
+        <p class="auth-hint" style="margin-bottom:12px">Введите email для сброса пароля</p>
+        <label class="field-label" for="forgotEmail">Email</label>
+        <input type="email" id="forgotEmail" class="input-field auth-input" required />
+        <button type="submit" class="btn btn-primary auth-submit">Отправить</button>
+        <button type="button" class="auth-link-btn" onclick="switchAuthTab('login')">← Назад</button>
+      </form>
+      <form id="resetForm" class="auth-form" style="display:none" onsubmit="event.preventDefault();submitResetPassword()">
+        <input type="hidden" id="resetToken" />
+        <label class="field-label" for="resetPassword">Новый пароль</label>
+        <input type="password" id="resetPassword" class="input-field auth-input" minlength="8" required />
+        <label class="field-label" for="resetPassword2">Повторите</label>
+        <input type="password" id="resetPassword2" class="input-field auth-input" minlength="8" required />
+        <button type="submit" class="btn btn-primary auth-submit">Сохранить пароль</button>
+      </form>
+      <div class="auth-divider"><span>или</span></div>
+      <button type="button" class="auth-google-btn" onclick="loginWithGoogle()">
+        <svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.5 6.1 29.5 4 24 4 12.95 4 4 12.95 4 24s8.95 20 20 20 20-8.95 20-20c0-1.3-.1-2.7-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.5 16.1 18.9 13 24 13c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.5 6.1 29.5 4 24 4 16.3 4 9.5 8.5 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 10-2 13.6-5.2l-6.3-5.2C29.3 36 24.9 38 24 38c-5.3 0-9.8-3.4-11.4-8.1l-6.5 5C9.5 39.5 16.3 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-1.1 3.2-3.3 5.9-6.2 7.7l6.3 5.2C39.5 39.5 44 34.5 44 24c0-1.3-.1-2.7-.4-3.5z"/></svg>
+        Войти через Google
+      </button>
+    </div>
+  </div>
+  <script src="/js/data.js"></script>
+  <script src="/js/app.js"></script>
+  <script src="/js/nightsky.js"></script>
+  <script src="/js/humor-test.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (typeof initAuthFromUrl === 'function') initAuthFromUrl();
+      if (typeof updateHeaderAuth === 'function') updateHeaderAuth();
+    });
+  </script>
+</body>
+</html>
