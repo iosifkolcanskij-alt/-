@@ -1,7 +1,7 @@
 ﻿// =============================================
 // API / AUTH
 // =============================================
-const API_URL = '/api';
+const API_URL = (window.SK_BASE || '') + '/api';
 
 let authToken   = localStorage.getItem('sk_token') || null;
 let currentUser = (() => { try { return JSON.parse(localStorage.getItem('sk_user')||'null'); } catch { return null; } })();
