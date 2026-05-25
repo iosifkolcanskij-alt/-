@@ -39,7 +39,7 @@ function Sync-Once {
         return
     }
     $msg = "sync: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')"
-    git commit -m $msg
+    git -c user.name="iosifkolcanskij-alt" -c user.email="iosifkolcanskij-alt@users.noreply.github.com" commit -m $msg
     if ($LASTEXITCODE -ne 0) {
         Write-Warning "Коммит не создан (возможно, нет изменений для коммита)."
         return
