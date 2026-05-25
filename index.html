@@ -3,13 +3,28 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>
+    (function () {
+      var base = '';
+      if (location.hostname.endsWith('.github.io')) {
+        var seg = location.pathname.split('/').filter(Boolean)[0];
+        if (seg && seg.indexOf('.') === -1) base = '/' + seg + '/';
+      }
+      window.__SK_BASE__ = base.replace(/\/$/, '');
+      if (base) {
+        var el = document.createElement('base');
+        el.href = base;
+        document.head.appendChild(el);
+      }
+    })();
+  </script>
   <title>Самопознание — Нумерология &amp; Психотесты</title>
   <meta name="description" content="Нумерология по дате рождения, психологические тесты и инструменты самопознания — бесплатно, без регистрации." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/css/style.css" />
-  <link rel="stylesheet" href="css/auth.css" /> 
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/auth.css" />
 </head>
 <body data-theme="dark">
 

@@ -1,4 +1,8 @@
 (function () {
+  if (typeof window.__SK_BASE__ === 'string') {
+    window.SK_BASE = window.__SK_BASE__;
+    return;
+  }
   function detectBase() {
     if (!location.hostname.endsWith('.github.io')) return '';
     const segments = location.pathname.split('/').filter(Boolean);
