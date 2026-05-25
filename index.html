@@ -8,8 +8,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css" />
-  <link rel="stylesheet" href="css/auth.css" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="css/auth.css" /> 
 </head>
 <body data-theme="dark">
 
@@ -142,8 +142,15 @@
     <section id="page-home" class="page active">
       <div class="hero">
         <div class="hero-badge">✦ Инструменты самопознания</div>
-        <h1 class="hero-title">Узнай себя глубже</h1>
-        <p class="hero-sub">Нумерология по дате рождения, психологические тесты и познавательные статьи — несколько подходов к пониманию своей личности. Бесплатно, без регистрации, без отправки данных.</p>
+        <h1 class="hero-title">Узнай себя <em class="hero-title-accent">глубже</em></h1>
+        <p class="hero-sub">
+          <span class="hero-sub-lead">Нумерология, психотесты и справочные материалы</span> — несколько языков для разговора с собой о чертах, реакциях и ценностях.
+        </p>
+        <p class="hero-tags">
+          <span class="hero-tag">Бесплатно</span>
+          <span class="hero-tag">Без регистрации</span>
+          <span class="hero-tag">Данные остаются у вас</span>
+        </p>
         <div class="hero-actions">
           <button class="btn btn-hero" onclick="showPage('numerology')">Начать с нумерологии</button>
           <button class="btn btn-hero-outline" onclick="document.getElementById('homeToolsSection').scrollIntoView({behavior:'smooth'})">Узнать подробнее ↓</button>
@@ -153,14 +160,20 @@
 
       <div class="stats-row">
         <div class="stat-item"><div class="stat-num">10</div><div class="stat-label">Тестов</div></div>
+        <span class="stat-div" aria-hidden="true"></span>
         <div class="stat-item"><div class="stat-num">150+</div><div class="stat-label">Вопросов</div></div>
+        <span class="stat-div" aria-hidden="true"></span>
         <div class="stat-item"><div class="stat-num">16</div><div class="stat-label">Типов MBTI</div></div>
+        <span class="stat-div" aria-hidden="true"></span>
         <div class="stat-item"><div class="stat-num">24</div><div class="stat-label">Знаков зодиака</div></div>
       </div>
 
       <div class="home-section" id="homeToolsSection">
-        <div class="home-section-label">Инструменты</div>
-        <h2 class="home-section-title">С чего начать?</h2>
+        <header class="home-block-head">
+          <div class="home-section-label">Инструменты</div>
+          <h2 class="home-section-title">С чего начать?</h2>
+          <p class="home-section-lead">Выберите направление — расчёты и тесты открываются в один клик, результаты можно сохранить в истории.</p>
+        </header>
         <div class="tools-grid">
           <div class="tool-section" onclick="showPage('numerology')" style="cursor:pointer">
             <div class="tool-icon-wrap amber"><span class="tool-icon">⬡</span></div>
@@ -187,15 +200,20 @@
       </div>
 
       <div class="home-section" id="whatIsSection">
-        <div class="home-section-label">О сервисе</div>
-        <h2 class="home-section-title">Что такое Самопознание?</h2>
+        <header class="home-block-head">
+          <div class="home-section-label">О сервисе</div>
+          <h2 class="home-section-title">Что такое Самопознание?</h2>
+        </header>
         <div id="whatIsContent"></div>
       </div>
 
       <div class="home-section" id="howItWorksSection">
-        <div class="home-section-label">Как это работает</div>
-        <h2 class="home-section-title">Три простых шага</h2>
-        <div class="steps-row">
+        <header class="home-block-head">
+          <div class="home-section-label">Как это работает</div>
+          <h2 class="home-section-title">Три простых шага</h2>
+          <p class="home-section-lead">От ввода данных до сохранения результата — без лишних экранов.</p>
+        </header>
+        <div class="steps-row home-steps">
           <div class="step-item">
             <div class="step-num">01</div>
             <div class="step-icon">📅</div>
@@ -220,8 +238,10 @@
       </div>
 
       <div class="home-section" id="faqSection">
-        <div class="home-section-label">FAQ</div>
-        <h2 class="home-section-title">Частые вопросы</h2>
+        <header class="home-block-head">
+          <div class="home-section-label">FAQ</div>
+          <h2 class="home-section-title">Частые вопросы</h2>
+        </header>
         <div id="faqContent"></div>
       </div>
 
@@ -229,16 +249,32 @@
         <div class="ps-row" id="privacyContent"></div>
       </div>
 
-      <div class="home-section" style="margin-top:40px">
-        <div class="home-section-label">Справочник</div>
-        <h2 class="home-section-title" style="font-size:22px">Подробные материалы для самообразования</h2>
-        <p class="page-sub" style="margin-top:8px;text-align:left">Ниже — развёрнутые тексты по нумерологии, типам личности и психологии.</p>
+      <div class="home-section home-handbook-intro">
+        <header class="home-block-head">
+          <div class="home-section-label">Справочник</div>
+          <h2 class="home-section-title home-section-title--handbook">Подробные материалы для самообразования</h2>
+          <p class="home-section-lead">Развёрнутые тексты по нумерологии, типам личности и психологии — читайте выборочно или по порядку разделов A–I.</p>
+        </header>
+        <nav class="home-toc" aria-label="Разделы справочника">
+          <a href="#ref-osnovy" class="home-toc-link">A · Основы</a>
+          <a href="#ref-numerologiya" class="home-toc-link">B · Нумерология</a>
+          <a href="#ref-temperament" class="home-toc-link">C · Темперамент</a>
+          <a href="#ref-mbti-i-bigfive" class="home-toc-link">D · MBTI</a>
+          <a href="#ref-otnosheniya-i-regulyaciya" class="home-toc-link">E · Отношения</a>
+          <a href="#ref-kachestvo" class="home-toc-link">F · Качество</a>
+          <a href="#ref-goroskopy-disclaimer" class="home-toc-link">Гороскопы</a>
+          <a href="#ref-glossary" class="home-toc-link">G · Глоссарий</a>
+          <a href="#ref-bibliografiya" class="home-toc-link">H · Авторы</a>
+          <a href="#ref-chavo-dop" class="home-toc-link">I · Вопросы</a>
+        </nav>
       </div>
 
-      <div class="home-section ref-anchor" id="ref-osnovy" style="margin-top:36px">
-        <div class="home-section-label">Раздел A</div>
-        <h3 class="home-section-title" style="font-size:26px">Основы самопознания и ключевые термины</h3>
-        <div class="what-is-card">
+      <div class="home-section home-ref-section ref-anchor" id="ref-osnovy">
+        <header class="home-block-head">
+          <div class="home-section-label">Раздел A</div>
+          <h3 class="home-section-title home-section-title--lg">Основы самопознания и ключевые термины</h3>
+        </header>
+        <div class="what-is-card home-prose-card">
           <div class="what-is-text ref-prose">
             <p><strong>Личность</strong> в разговорной психологии — устойчивые паттерны мышления, эмоций и поведения, которые задают ваш «стиль» в отношениях, работе и стрессе.</p>
             <p><strong>Черта личности (trait)</strong> — измеряемое свойство «на сколько»: например высокая или низкая добросовестность. Такие качества описывают статистический профиль человека по сравнению с большой выборкой.</p>
@@ -250,14 +286,16 @@
       </div>
 
       
-      <div class="home-section ref-anchor" id="ref-numerologiya" style="margin-top:36px">
-        <div class="home-section-label">Раздел B</div>
-        <h3 class="home-section-title" style="font-size:26px">Нумерология и психоматрица как справочный язык</h3>
+      <div class="home-section home-ref-section ref-anchor" id="ref-numerologiya">
+        <header class="home-block-head">
+          <div class="home-section-label">Раздел B</div>
+          <h3 class="home-section-title home-section-title--lg">Нумерология и психоматрица как справочный язык</h3>
+        </header>
         <div class="ref-two-col">
           <div class="glass-card" style="padding:20px 22px">
             <div class="section-title" style="margin-bottom:10px">Как читать психоматрицу буквально</div>
             <div class="ref-prose">
-              <p>Ряд чисел из полной запиши даты рождения (вместе с ведущими нулями) заполняет квадрат 3×3. Если цифра встретилась <em>n</em> раз, говорят о «работе качества»: ноль — возможный дефицит опыта, единица-двойка — умеренно, многократность — акцент. Линии (горизонтали/вертикали/диагонали) агрегируют силы в «цели», «семье», «логике» и других блоках приложения.</p>
+              <p>Ряд чисел из полной записи даты рождения (вместе с ведущими нулями) заполняет квадрат 3×3. Если цифра встретилась <em>n</em> раз, говорят о «работе качества»: ноль — возможный дефицит опыта, единица-двойка — умеренно, многократность — акцент. Линии (горизонтали/вертикали/диагонали) агрегируют силы в «цели», «семье», «логике» и других блоках приложения.</p>
             </div>
           </div>
           <div class="glass-card" style="padding:20px 22px">
@@ -268,12 +306,14 @@
           </div>
         </div>
         
-        <div class="ref-prose tool-note">Нумерологические символики не предсказывают конкретные события; они упорядочивают разговор человека про себя. Для работы со страхом, травмами и зависимостями нужен живой профессионал.</div>
+        <div class="ref-prose home-callout home-callout--note">Нумерологические символики не предсказывают конкретные события; они упорядочивают разговор человека про себя. Для работы со страхом, травмами и зависимостями нужен живой профессионал.</div>
       </div>
 
-      <div class="home-section ref-anchor" id="ref-temperament" style="margin-top:36px">
-        <div class="home-section-label">Раздел C</div>
-        <h3 class="home-section-title" style="font-size:26px">Темперамент: справочник по четырём типам и типичным паттернам</h3>
+      <div class="home-section home-ref-section ref-anchor" id="ref-temperament">
+        <header class="home-block-head">
+          <div class="home-section-label">Раздел C</div>
+          <h3 class="home-section-title home-section-title--lg">Темперамент: справочник по четырём типам и типичным паттернам</h3>
+        </header>
         <div class="compare-grid">
           <div class="compare-card compare-amber">
             <div class="cc-emoji">🔥</div>
@@ -306,10 +346,12 @@
         </div>
       </div>
 
-      <div class="home-section ref-anchor" id="ref-mbti-i-bigfive" style="margin-top:36px">
-        <div class="home-section-label">Раздел D</div>
-        <h3 class="home-section-title" style="font-size:26px">MBTI и «Большая пятёрка»: как они дополняют друг друга</h3>
-        <div class="what-is-card">
+      <div class="home-section home-ref-section ref-anchor" id="ref-mbti-i-bigfive">
+        <header class="home-block-head">
+          <div class="home-section-label">Раздел D</div>
+          <h3 class="home-section-title home-section-title--lg">MBTI и «Большая пятёрка»: как они дополняют друг друга</h3>
+        </header>
+        <div class="what-is-card home-prose-card">
           <div class="ref-prose">
             <p><strong>MBTI</strong> упаковывает вас в четыре литеры; привычен в HR и командных ретритах.</p>
             <p><strong>Big Five (OCEAN)</strong>: <em>O</em>penness — любопытство к абстрактному; <em>C</em>onscientiousness — самоорганизация и контроль; <em>E</em>xtraversion — социальный заряд; <em>A</em>greeableness — сотрудничество и мягкость; <em>N</em>euroticism — чувствительность негатива стресса (не синоним болезни, а шкала напряженности).</p>
@@ -332,9 +374,11 @@
         </div>
       </div>
 
-      <div class="home-section ref-anchor" id="ref-otnosheniya-i-regulyaciya" style="margin-top:36px">
-        <div class="home-section-label">Раздел E</div>
-        <h3 class="home-section-title" style="font-size:26px">Близость, эмоции и чувство контроля над жизнью</h3>
+      <div class="home-section home-ref-section ref-anchor" id="ref-otnosheniya-i-regulyaciya">
+        <header class="home-block-head">
+          <div class="home-section-label">Раздел E</div>
+          <h3 class="home-section-title home-section-title--lg">Близость, эмоции и чувство контроля над жизнью</h3>
+        </header>
         <div class="compare-grid">
           <div class="compare-card compare-purple">
             <div class="cc-emoji">💞</div>
@@ -357,10 +401,12 @@
         </div>
       </div>
 
-      <div class="home-section ref-anchor" id="ref-kachestvo" style="margin-top:36px">
-        <div class="home-section-label">Раздел F</div>
-        <h3 class="home-section-title" style="font-size:26px">Качество психометрии: что любой справочник обязан сказать</h3>
-        <div class="what-is-card">
+      <div class="home-section home-ref-section ref-anchor" id="ref-kachestvo">
+        <header class="home-block-head">
+          <div class="home-section-label">Раздел F</div>
+          <h3 class="home-section-title home-section-title--lg">Качество психометрии: что любой справочник обязан сказать</h3>
+        </header>
+        <div class="what-is-card home-prose-card">
           <div class="ref-prose">
             <p>Самодиагностика никогда не заменит клиническую беседу. Онлайн-опросы дают язык наблюдений или пересекаются с литературой, но <strong>не ставят диагноз по МКБ/DSM без врача</strong>.</p>
             <p><strong>Честность ответа</strong> — главный вклад человека в точность. Социальная желательность (хотеть быть «правильнее» для опросника) завышает «хорошие» черты или скрывает дискомфорт.</p>
@@ -369,9 +415,11 @@
         </div>
       </div>
 
-      <div class="home-section ref-anchor" id="ref-goroskopy-disclaimer" style="margin-top:36px">
-        <div class="home-section-label">Раздел F</div>
-        <h3 class="home-section-title" style="font-size:26px">Гороскопы в справочнике: символический слой, не инструкция к жизни</h3>
+      <div class="home-section home-ref-section ref-anchor" id="ref-goroskopy-disclaimer">
+        <header class="home-block-head">
+          <div class="home-section-label">Астрология</div>
+          <h3 class="home-section-title home-section-title--lg">Гороскопы в справочнике: символический слой, не инструкция к жизни</h3>
+        </header>
         <div class="ref-two-col">
           <div class="glass-card ref-prose"><strong>Западная астрология</strong> задаёт узнаваемые архетипы и разговоры о стихии/планете. Исторические корни смешивают наблюдения неба и культурные нарративы. Современному человеку полезнее честно понимать, что символические тексты поддерживают исследование ценности, но не управляют физическими законами мира.</div>
           <div class="glass-card ref-prose"><strong>Китайский шэнсяо</strong> задаёт животное года и элемент в 60-летнем цикле. Здесь важна культурная грамотность: относиться почтительно, не превращать в шутку чужое наследство. Интерпретации в приложении — развлекательно-полезный словарь описаний, а не указание искать любовь только среди тех, кто «совместим».</div>
@@ -380,9 +428,11 @@
 
       
 
-      <div class="home-section ref-anchor" id="ref-glossary" style="margin-top:36px">
-        <div class="home-section-label">Раздел G</div>
-        <h3 class="home-section-title" style="font-size:26px">Глоссарий общих понятий</h3>
+      <div class="home-section home-ref-section ref-anchor" id="ref-glossary">
+        <header class="home-block-head">
+          <div class="home-section-label">Раздел G</div>
+          <h3 class="home-section-title home-section-title--lg">Глоссарий общих понятий</h3>
+        </header>
         <div class="faq-list">
           <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">Аффект регуляция <span class="faq-arrow">▾</span></div><div class="faq-a">Способ управлять силой и длительностью переживаемых эмоций: от переименования чувства до физической стабилизации дыхания/тела и отсроченного решения проблемного письма.</div></div>
           <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">Якорное убеждение (core belief) <span class="faq-arrow">▾</span></div><div class="faq-a">Глубокие правила вроде «меня недостаточно» или «мир всегда капризен», которые окрашивают интерпретации событий. Они могут поддерживаться травмами, но поддаются изменению в терапии КПТ-семейства и опыте новых маленьких успехов.</div></div>
@@ -394,21 +444,25 @@
         </div>
       </div>
 
-      <div class="home-section ref-anchor" id="ref-bibliografiya" style="margin-top:36px">
-        <div class="home-section-label">Раздел H</div>
-        <h3 class="home-section-title" style="font-size:26px">Имена и направления, на которые можно опереться дальше</h3>
-        <div class="ref-prose glass-card">
+      <div class="home-section home-ref-section ref-anchor" id="ref-bibliografiya">
+        <header class="home-block-head">
+          <div class="home-section-label">Раздел H</div>
+          <h3 class="home-section-title home-section-title--lg">Имена и направления, на которые можно опереться дальше</h3>
+        </header>
+        <div class="ref-prose glass-card home-prose-card">
           <p><strong>Карл Юнг</strong> про типирование восприятия и символический язык архетипов; связь традиции типологий с литературой и искусством.</p>
           <p><strong>Изабель Бриггс Майерс и Катарина Бриггс</strong> адаптировали эвристический опрос для коммуницирования профессиональных различий; MBTI многими академическими школами воспринимается со скепсисом, но сохраняет практическую популярность.</p>
           <p><strong>Модель «Большой пятёрки»</strong> — широкий консенсус личностной психологии о структуре черт (часто связывают с Costa и McCrae и развитием лексической гипотезы Allport и Odbert середины XX века).</p>
           <p><strong>Джон Боулби и Мэри Эйнсуорт</strong> исследовали привязанность между младенцем и значимым другом как основу более поздней теории паттернов взрослых отношений.</p>
-          <p style="margin-top:12px;color:var(--text-dim);font-size:14px">Список упрощён и не содержит ссылок — это отправная точка для самостоятельного образования через учебники психологии личности и лицензированные курсы.</p>
+          <p class="ref-footnote">Список упрощён и не содержит ссылок — это отправная точка для самостоятельного образования через учебники психологии личности и лицензированные курсы.</p>
         </div>
       </div>
 
-      <div class="home-section ref-anchor" id="ref-chavo-dop" style="margin-top:36px">
-        <div class="home-section-label">Раздел I</div>
-        <h3 class="home-section-title" style="font-size:26px">Дополнительные вопросы для справочника</h3>
+      <div class="home-section home-ref-section ref-anchor" id="ref-chavo-dop">
+        <header class="home-block-head">
+          <div class="home-section-label">Раздел I</div>
+          <h3 class="home-section-title home-section-title--lg">Дополнительные вопросы для справочника</h3>
+        </header>
         <div class="faq-list">
           <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">Почему нельзя вводить дату будущего? <span class="faq-arrow">▾</span></div><div class="faq-a">День рождения по определению уже произошёл. Будущие даты противоречат логике расчётов и приводят к бессмысленным текстам «про вашу уже родившуюся личность».</div></div>
           <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">Можно ли пройти тест дважды в один день? <span class="faq-arrow">▾</span></div><div class="faq-a">Можно, но второй результат полезнее смотреть как «режим утро/настроение вечера», а не как новое «Я навсегда». Для наблюдений сохраняйте оба в истории с пометкой контекста.</div></div>

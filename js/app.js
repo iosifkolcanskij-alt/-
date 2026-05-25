@@ -297,12 +297,12 @@ function toggleFaq(el) {
   const whatIs = document.getElementById('whatIsContent');
   if (whatIs) {
     whatIs.innerHTML = `
-      <div class="what-is-card">
-        <div class="what-is-text">
-          <p>Самопознание — изучение своей личности: черт характера, реакций, ценностей, сильных и слабых сторон. Знание себя помогает принимать осознанные решения, строить отношения и находить дело, которое приносит удовлетворение.</p>
-          <p>Приложение объединяет нумерологию, психологические тесты и гороскопы — несколько подходов к пониманию себя. Результаты носят познавательный характер и не заменяют консультацию специалиста.</p>
+      <div class="what-is-card home-prose-card">
+        <div class="what-is-text ref-prose">
+          <p class="home-lead-paragraph">Самопознание — это внимательное изучение своей личности: черт характера, реакций, ценностей, сильных и слабых сторон. Чем яснее вы видите свои паттерны, тем проще принимать решения, строить отношения и выбирать дело, которое действительно наполняет.</p>
+          <p>Приложение собирает в одном месте <strong>нумерологию</strong>, <strong>психологические тесты</strong> и <strong>гороскопы</strong> — разные языки для одного разговора с собой. Результаты носят познавательный характер и <em>не заменяют</em> консультацию специалиста.</p>
         </div>
-        <div class="what-is-pills">
+        <div class="home-benefits">
           <span class="pill pill-green">🧠 Понять себя</span>
           <span class="pill pill-purple">💡 Раскрыть таланты</span>
           <span class="pill pill-blue">🤝 Улучшить общение</span>
@@ -333,10 +333,10 @@ function toggleFaq(el) {
   const privacy = document.getElementById('privacyContent');
   if (privacy) {
     privacy.innerHTML = `
-      <div class="ps-item"><span class="ps-icon">🔒</span> Данные тестов не передаются третьим лицам</div>
-      <div class="ps-item"><span class="ps-icon">📱</span> Без регистрации всё остаётся в браузере</div>
-      <div class="ps-item"><span class="ps-icon">☁️</span> С аккаунтом история хранится в вашей БД на сервере</div>
-      <div class="ps-item"><span class="ps-icon">🧪</span> Не является медицинской или психиатрической услугой</div>`;
+      <div class="ps-card"><span class="ps-icon">🔒</span><div class="ps-text"><strong>Конфиденциальность</strong><span>Данные тестов не передаются третьим лицам</span></div></div>
+      <div class="ps-card"><span class="ps-icon">📱</span><div class="ps-text"><strong>Локально</strong><span>Без регистрации всё остаётся в браузере</span></div></div>
+      <div class="ps-card"><span class="ps-icon">☁️</span><div class="ps-text"><strong>С аккаунтом</strong><span>История синхронизируется в вашей базе на сервере</span></div></div>
+      <div class="ps-card"><span class="ps-icon">🧪</span><div class="ps-text"><strong>Не медицина</strong><span>Не является медицинской или психиатрической услугой</span></div></div>`;
   }
 })();
 

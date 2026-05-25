@@ -713,13 +713,15 @@ input { font-family: inherit; }
   transition: all var(--transition);
 }
 .btn-hero:hover { transform: translateY(-2px); box-shadow: 0 12px 32px var(--primary-glow); background: var(--primary-light); }
-.btn-hero-ghost {
+.btn-hero-ghost,
+.btn-hero-outline {
   padding: 14px 28px; border-radius: 99px;
   background: transparent; border: 1px solid var(--border);
   color: var(--text-muted); font-size: 15px; font-weight: 600;
   transition: all var(--transition);
 }
-.btn-hero-ghost:hover { border-color: var(--primary); color: var(--text); background: var(--surface); }
+.btn-hero-ghost:hover,
+.btn-hero-outline:hover { border-color: var(--primary); color: var(--text); background: var(--surface); }
 
 /* ============================
    СТРОКА СТАТИСТИКИ
@@ -1500,14 +1502,16 @@ body {
   transform: translateY(-2px) !important;
 }
 
-.btn-hero-ghost {
+.btn-hero-ghost,
+.btn-hero-outline {
   background: rgba(99,102,241,0.1) !important;
   border: 1px solid rgba(99,102,241,0.35) !important;
   color: #a5b4fc !important;
   backdrop-filter: blur(8px) !important;
   transition: all 0.22s ease !important;
 }
-.btn-hero-ghost:hover {
+.btn-hero-ghost:hover,
+.btn-hero-outline:hover {
   background: rgba(99,102,241,0.2) !important;
   border-color: rgba(99,102,241,0.6) !important;
   transform: translateY(-2px) !important;
@@ -2721,4 +2725,418 @@ body {
 /* Drop-shadow on the whole clock */
 [data-theme="light"] .sw-clock-svg {
   filter: drop-shadow(0 2px 8px rgba(37,99,235,0.18)) !important;
+}
+
+/* ═══════════════════════════════════════
+   ГЛАВНАЯ — ТИПОГРАФИКА И ТЕКСТОВЫЕ БЛОКИ
+   ═══════════════════════════════════════ */
+
+#page-home {
+  --home-prose: 1.78;
+  --home-max: 68ch;
+}
+
+.hero-title-accent {
+  font-style: normal;
+  background: linear-gradient(120deg, #c4b5fd 0%, #38bdf8 55%, #a78bfa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-sub-lead {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.hero-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin: 18px auto 0;
+  max-width: 520px;
+}
+
+.hero-tag {
+  padding: 6px 14px;
+  border-radius: 99px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--primary-light);
+  background: rgba(99, 102, 241, 0.12);
+  border: 1px solid rgba(99, 102, 241, 0.28);
+}
+
+.home-block-head {
+  margin-bottom: 22px;
+}
+
+.home-block-head .home-section-title {
+  margin-bottom: 0;
+}
+
+.home-section-lead {
+  margin-top: 10px;
+  max-width: var(--home-max);
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--text-muted);
+}
+
+.home-section-title--lg {
+  font-size: clamp(22px, 4vw, 28px);
+  letter-spacing: -0.6px;
+  line-height: 1.25;
+}
+
+.home-section-title--handbook {
+  font-size: clamp(24px, 5vw, 32px);
+  background: linear-gradient(135deg, var(--text) 20%, var(--primary-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.home-handbook-intro {
+  margin-top: 56px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+
+.home-toc {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.home-toc-link {
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  text-decoration: none;
+  transition: border-color var(--transition), color var(--transition), background var(--transition);
+}
+
+.home-toc-link:hover {
+  color: var(--primary-light);
+  border-color: var(--border-active);
+  background: var(--surface-hover);
+}
+
+.home-ref-section {
+  margin-top: 40px;
+  scroll-margin-top: 88px;
+}
+
+.home-ref-section + .home-ref-section {
+  padding-top: 8px;
+}
+
+/* Сетка инструментов на главной */
+.tools-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+@media (min-width: 720px) {
+  .tools-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.tools-grid .tool-section {
+  margin-top: 0;
+  padding: 22px 20px;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 16px;
+  cursor: pointer;
+  transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition);
+}
+
+.tools-grid .tool-section:hover {
+  transform: translateY(-4px);
+  border-color: var(--border-active);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.25);
+}
+
+.tool-icon-wrap {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.tool-icon-wrap.amber  { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.25); }
+.tool-icon-wrap.indigo { background: rgba(99, 102, 241, 0.15); color: #a5b4fc; border: 1px solid rgba(99, 102, 241, 0.3); }
+.tool-icon-wrap.gold   { background: rgba(234, 179, 8, 0.12); color: #fde047; border: 1px solid rgba(234, 179, 8, 0.28); }
+
+.tool-name {
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  margin-bottom: 6px;
+  color: var(--text);
+}
+
+.tools-grid .tool-desc {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* Шаги */
+.home-steps .step-item {
+  position: relative;
+  overflow: hidden;
+}
+
+.home-steps .step-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary), #38bdf8);
+  opacity: 0.85;
+}
+
+.home-steps .step-title {
+  font-size: 15px;
+}
+
+.home-steps .step-desc {
+  font-size: 13.5px;
+  line-height: 1.6;
+}
+
+/* Читаемый текст справочника */
+.ref-prose {
+  font-size: 15.5px;
+  line-height: var(--home-prose);
+  color: var(--text-muted);
+}
+
+.ref-prose p {
+  margin: 0 0 14px;
+}
+
+.ref-prose p:last-child {
+  margin-bottom: 0;
+}
+
+.ref-prose strong {
+  color: var(--text);
+  font-weight: 700;
+}
+
+.ref-prose em {
+  color: var(--primary-light);
+  font-style: normal;
+  font-weight: 600;
+}
+
+.home-lead-paragraph {
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--text);
+}
+
+.home-prose-card {
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+}
+
+.home-benefits,
+.what-is-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-top: 4px;
+  border-top: 1px solid var(--border);
+  margin-top: 4px;
+}
+
+.home-callout {
+  margin-top: 18px;
+  padding: 16px 18px;
+  border-radius: 14px;
+  font-size: 14.5px;
+  line-height: 1.65;
+  border-left: 4px solid var(--primary);
+  background: rgba(99, 102, 241, 0.08);
+}
+
+.home-callout--note {
+  border-left-color: var(--amber);
+  background: rgba(245, 158, 11, 0.08);
+}
+
+.ref-two-col {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+  margin-top: 16px;
+}
+
+@media (min-width: 768px) {
+  .ref-two-col {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.ref-two-col .glass-card {
+  padding: 22px 24px !important;
+}
+
+.home-ref-mini-title {
+  margin: 22px 0 12px;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--primary-light);
+}
+
+.dense-mbti-list p {
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed var(--border);
+}
+
+.dense-mbti-list p:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.ref-footnote {
+  margin-top: 14px !important;
+  padding-top: 12px;
+  border-top: 1px dashed var(--border);
+  font-size: 13.5px !important;
+  color: var(--text-dim) !important;
+  font-style: italic;
+}
+
+/* Полоса конфиденциальности */
+.privacy-strip {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(59, 130, 246, 0.06));
+  border-color: rgba(99, 102, 241, 0.25);
+}
+
+.ps-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  justify-content: stretch;
+}
+
+@media (min-width: 600px) {
+  .ps-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 960px) {
+  .ps-row {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.ps-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+
+.ps-card .ps-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--text-muted);
+}
+
+.ps-card .ps-text strong {
+  font-size: 14px;
+  color: var(--text);
+  font-weight: 700;
+}
+
+.ps-card .ps-icon {
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+/* FAQ на главной */
+#faqSection .faq-item {
+  border-radius: 14px;
+}
+
+#faqSection .faq-q {
+  font-size: 15px;
+}
+
+#faqSection .faq-a {
+  font-size: 14.5px;
+  padding-top: 0;
+  padding-bottom: 18px;
+}
+
+.compare-card .cc-for {
+  font-style: italic;
+  border-left: 3px solid var(--primary);
+}
+
+[data-theme="light"] .hero-tag {
+  background: rgba(37, 99, 235, 0.08);
+  border-color: rgba(37, 99, 235, 0.2);
+  color: #1d4ed8;
+}
+
+[data-theme="light"] .home-toc-link {
+  background: #f8fafc;
+  border-color: rgba(37, 99, 235, 0.15);
+  color: #334155;
+}
+
+[data-theme="light"] .home-toc-link:hover {
+  color: #1d4ed8;
+  border-color: rgba(37, 99, 235, 0.35);
+  background: #eff6ff;
+}
+
+[data-theme="light"] .ref-prose strong {
+  color: #0b1e3b;
+}
+
+[data-theme="light"] .home-callout {
+  background: rgba(37, 99, 235, 0.06);
+}
+
+[data-theme="light"] .home-section-title--handbook {
+  background: linear-gradient(135deg, #0b1e3b 20%, #1d4ed8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
