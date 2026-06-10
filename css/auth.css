@@ -138,3 +138,44 @@
   justify-content: center;
   flex-wrap: wrap;
 }
+
+@media (max-width: 768px) {
+  .auth-modal-overlay {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .auth-modal-inner {
+    max-width: none;
+    max-height: 92vh;
+    border-radius: 20px 20px 0 0;
+    padding: 24px 18px calc(20px + env(safe-area-inset-bottom, 0));
+    margin-top: auto;
+  }
+
+  .auth-modal-title {
+    font-size: 20px;
+  }
+
+  .auth-modal-sub {
+    font-size: 13px;
+  }
+
+  .auth-input,
+  .auth-form .input-field {
+    font-size: 16px;
+  }
+
+  .profile-guest-card {
+    padding: 22px 16px !important;
+  }
+
+  .profile-guest-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .profile-guest-actions .btn {
+    width: 100%;
+  }
+}
