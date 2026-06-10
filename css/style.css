@@ -208,6 +208,29 @@ input { font-family: inherit; }
   color: var(--primary-light);
 }
 
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.profile-cabinet-head { margin-bottom: 0; }
+.profile-cabinet-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+.profile-cabinet-user {
+  font-size: 22px;
+  font-weight: 800;
+  margin-top: 4px;
+}
+.profile-cabinet-login {
+  margin-top: 2px;
+  font-size: 13px;
+}
+
 .auth-tab {
   background: transparent;
   color: var(--text-muted);

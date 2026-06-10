@@ -1,289 +1,4 @@
 ﻿// =============================================
-// API / AUTH
-// =============================================
-const API_URL = (window.SK_BASE || '') + '/api';
-
-let authToken   = localStorage.getItem('sk_token') || null;
-let currentUser = (() => { try { return JSON.parse(localStorage.getItem('sk_user')||'null'); } catch { return null; } })();
-let serverHistory = [];
-let pendingVerifyEmail = '';
-
-class ApiError extends Error {
-  constructor(message, code) {
-    super(message);
-    this.name = 'ApiError';
-    this.code = code || null;
-  }
-}
-
-async function apiCall(path, method = 'GET', body = null) {
-  const opts = { method, headers: { 'Content-Type': 'application/json' } };
-  if (authToken) opts.headers['Authorization'] = 'Bearer ' + authToken;
-  if (body) opts.body = JSON.stringify(body);
-  let data;
-  try {
-    const r = await fetch(API_URL + path, opts);
-    data = await r.json();
-    if (!r.ok) throw new ApiError(data.error || 'Ошибка сервера', data.code || null);
-  } catch (e) {
-    if (e instanceof ApiError) throw e;
-    throw new ApiError('Сервер недоступен. Запустите: php -S localhost:8080 router.php', 'NETWORK');
-  }
-  return data;
-}
-
-function setAuthSession(token, user) {
-  authToken = token;
-  currentUser = user;
-  localStorage.setItem('sk_token', token);
-  localStorage.setItem('sk_user', JSON.stringify(user));
-  const p = getProfile();
-  if (user.name) p.name = user.name;
-  if (user.avatar) p.avatar = user.avatar;
-  saveProfile(p);
-}
-
-function clearAuthMessages() {
-  const err = document.getElementById('authError');
-  const ok = document.getElementById('authSuccess');
-  if (err) err.textContent = '';
-  if (ok) ok.textContent = '';
-}
-
-async function fetchServerHistory() {
-  if (!authToken) return;
-  try {
-    const rows = await apiCall('/history');
-    serverHistory = rows.map(r => ({
-      id: String(r.id),
-      type: r.type,
-      title: r.title,
-      result: r.result,
-      date: new Date(r.createdAt).toLocaleString('ru-RU'),
-    }));
-  } catch(e) { console.warn('history fetch failed', e); }
-}
-
-function updateHeaderAuth() {
-  const btn = document.getElementById('authBtn');
-  if (!btn) return;
-  if (currentUser) {
-    btn.textContent = (currentUser.avatar || '🧑') + ' ' + (currentUser.name || currentUser.username);
-    btn.onclick = () => showPage('profile');
-  } else {
-    btn.textContent = 'Войти';
-    btn.onclick = () => showAuthModal();
-  }
-}
-
-function showAuthModal(tab = 'login') {
-  const modal = document.getElementById('authModal');
-  if (!modal) return;
-  modal.style.display = 'flex';
-  switchAuthTab(tab);
-}
-function hideAuthModal() {
-  const modal = document.getElementById('authModal');
-  if (modal) modal.style.display = 'none';
-  clearAuthMessages();
-}
-function switchAuthTab(tab) {
-  ['loginForm', 'registerForm', 'verifyPendingForm', 'forgotForm', 'resetForm'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.style.display = 'none';
-  });
-  const tabsEl = document.getElementById('authTabs');
-  const showTabs = tab === 'login' || tab === 'register';
-  if (tabsEl) tabsEl.style.display = showTabs ? 'flex' : 'none';
-  const map = { login: 'loginForm', register: 'registerForm', verify: 'verifyPendingForm', forgot: 'forgotForm', reset: 'resetForm' };
-  const target = document.getElementById(map[tab]);
-  if (target) target.style.display = 'block';
-  document.querySelectorAll('.auth-tab').forEach(t => {
-    t.classList.toggle('active', showTabs && t.dataset.tab === tab);
-  });
-  clearAuthMessages();
-}
-
-async function submitLogin() {
-  const email = document.getElementById('loginEmail').value.trim();
-  const password = document.getElementById('loginPassword').value;
-  const errEl = document.getElementById('authError');
-  clearAuthMessages();
-  try {
-    const data = await apiCall('/auth/login', 'POST', { email, password });
-    setAuthSession(data.token, data.user);
-    hideAuthModal();
-    updateHeaderAuth();
-    await fetchServerHistory();
-    if (document.querySelector('.page.active')?.id === 'page-history') renderHistory();
-    if (document.querySelector('.page.active')?.id === 'page-profile') renderProfile();
-  } catch (e) {
-    if (e.code === 'EMAIL_NOT_VERIFIED') {
-      pendingVerifyEmail = email;
-      const el = document.getElementById('verifyPendingEmail');
-      if (el) el.textContent = email;
-      switchAuthTab('verify');
-    }
-    errEl.textContent = e.message;
-  }
-}
-
-async function submitRegister() {
-  const username = document.getElementById('regUsername').value.trim();
-  const email = document.getElementById('regEmail').value.trim();
-  const password = document.getElementById('regPassword').value;
-  const name = document.getElementById('regName').value.trim();
-  const errEl = document.getElementById('authError');
-  clearAuthMessages();
-  try {
-    const data = await apiCall('/auth/register', 'POST', { username, email, password, name: name || username });
-    pendingVerifyEmail = email;
-    document.getElementById('verifyPendingEmail').textContent = email;
-    const okEl = document.getElementById('authSuccess');
-    if (okEl) okEl.textContent = data.message || 'Проверьте почту';
-    switchAuthTab('verify');
-  } catch (e) { errEl.textContent = e.message; }
-}
-
-async function submitResendVerification() {
-  const email = pendingVerifyEmail || document.getElementById('regEmail')?.value.trim() || document.getElementById('loginEmail')?.value.trim();
-  const errEl = document.getElementById('authError');
-  const okEl = document.getElementById('authSuccess');
-  clearAuthMessages();
-  if (!email) { errEl.textContent = 'Укажите email'; return; }
-  try {
-    const data = await apiCall('/auth/resend-verification', 'POST', { email });
-    okEl.textContent = data.message || 'Письмо отправлено';
-  } catch (e) { errEl.textContent = e.message; }
-}
-
-async function submitForgotPassword() {
-  const email = document.getElementById('forgotEmail').value.trim();
-  const errEl = document.getElementById('authError');
-  const okEl = document.getElementById('authSuccess');
-  clearAuthMessages();
-  try {
-    const data = await apiCall('/auth/forgot-password', 'POST', { email });
-    okEl.textContent = data.message || 'Письмо отправлено';
-  } catch (e) { errEl.textContent = e.message; }
-}
-
-async function submitResetPassword() {
-  const token = document.getElementById('resetToken').value;
-  const p1 = document.getElementById('resetPassword').value;
-  const p2 = document.getElementById('resetPassword2').value;
-  const errEl = document.getElementById('authError');
-  clearAuthMessages();
-  if (p1 !== p2) { errEl.textContent = 'Пароли не совпадают'; return; }
-  try {
-    const data = await apiCall('/auth/reset-password', 'POST', { token, password: p1 });
-    setAuthSession(data.token, data.user);
-    hideAuthModal();
-    updateHeaderAuth();
-    await fetchServerHistory();
-    showPage('profile');
-  } catch (e) { errEl.textContent = e.message; }
-}
-
-function loginWithGoogle() {
-  window.location.href = API_URL + '/auth/google';
-}
-
-function initAuthFromUrl() {
-  const params = new URLSearchParams(window.location.search);
-  const token = params.get('token');
-  const reset = params.get('reset');
-  if (token) {
-    authToken = token;
-    localStorage.setItem('sk_token', token);
-    apiCall('/auth/me').then(data => {
-      setAuthSession(token, data.user);
-      updateHeaderAuth();
-      fetchServerHistory();
-      showPage('profile');
-    }).catch(() => {
-      localStorage.removeItem('sk_token');
-      authToken = null;
-      showAuthModal('login');
-    });
-    window.history.replaceState({}, '', window.location.pathname);
-    return;
-  }
-  if (reset) {
-    document.getElementById('resetToken').value = reset;
-    showAuthModal('reset');
-    window.history.replaceState({}, '', window.location.pathname);
-    return;
-  }
-  if (params.get('verified') === '1') {
-    showAuthModal('login');
-    document.getElementById('authSuccess').textContent = 'Email подтверждён. Войдите в аккаунт.';
-    window.history.replaceState({}, '', window.location.pathname);
-    return;
-  }
-  const verifyMsg = { invalid: 'Ссылка недействительна', expired: 'Ссылка истекла', missing: 'Токен не найден' };
-  if (params.has('verify')) {
-    showAuthModal('login');
-    document.getElementById('authError').textContent = verifyMsg[params.get('verify')] || 'Ошибка подтверждения';
-    window.history.replaceState({}, '', window.location.pathname);
-    return;
-  }
-  if (params.has('google')) {
-    showAuthModal('login');
-    document.getElementById('authError').textContent = 'Не удалось войти через Google';
-    window.history.replaceState({}, '', window.location.pathname);
-  }
-}
-
-async function logout() {
-  if (!confirm('Выйти из аккаунта?')) return;
-  authToken = null;
-  currentUser = null;
-  serverHistory = [];
-  localStorage.removeItem('sk_token');
-  localStorage.removeItem('sk_user');
-  updateHeaderAuth();
-  showPage('home');
-}
-
-async function saveProfileToServer() {
-  if (!authToken) return;
-  try {
-    const p = getProfile();
-    const data = await apiCall('/auth/profile', 'PUT', {
-      name: p.name || (currentUser && currentUser.name),
-      avatar: p.avatar || '🧑',
-    });
-    currentUser = data.user;
-    localStorage.setItem('sk_user', JSON.stringify(currentUser));
-    updateHeaderAuth();
-  } catch(e) { console.warn('profile save failed', e); }
-}
-
-if (authToken) {
-  fetchServerHistory().then(() => {
-    if (document.querySelector('.page.active')?.id === 'page-history') renderHistory();
-  });
-  apiCall('/auth/me').then(d => {
-    currentUser = d.user;
-    localStorage.setItem('sk_user', JSON.stringify(currentUser));
-    updateHeaderAuth();
-  }).catch(() => {
-    authToken = null;
-    currentUser = null;
-    serverHistory = [];
-    localStorage.removeItem('sk_token');
-    localStorage.removeItem('sk_user');
-    updateHeaderAuth();
-  });
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  initAuthFromUrl();
-  updateHeaderAuth();
-});
-
-// =============================================
 // FAQ TOGGLE
 // =============================================
 function toggleFaq(el) {
@@ -316,12 +31,11 @@ function toggleFaq(el) {
   const faq = document.getElementById('faqContent');
   if (faq) {
     const items = [
-      ['Нужна ли регистрация?', 'Нет. Нумерология, тесты и зодиак работают без аккаунта. Регистрация нужна только для синхронизации истории между устройствами.'],
-      ['Куда сохраняются результаты?', 'Без входа — в браузере на этом устройстве. С аккаунтом — на сервере (MySQL), доступ с любого устройства после входа.'],
+      ['Нужна ли регистрация?', 'Для сохранения результатов нужен аккаунт — нажмите «Войти» в шапке. Без входа тесты можно пройти, но данные не сохраняются.'],
+      ['Куда сохраняются результаты?', 'В сессии браузера во время работы. Чтобы не потерять их, войдите в аккаунт и нажмите «Сохранить данные» в личном кабинете.'],
       ['Насколько точны тесты?', 'Это самооценочные опросники для саморефлексии, а не клиническая диагностика. Точность зависит от честности ответов и контекста жизни.'],
       ['Можно ли доверять нумерологии и зодиаку?', 'Они дают символический язык для размышления о себе, а не научный прогноз событий. Используйте как повод для разговора с собой.'],
-      ['Как подтвердить email после регистрации?', 'На почту приходит ссылка. Перейдите по ней, затем войдите в аккаунт. Письмо можно запросить повторно в окне входа.'],
-      ['Забыли пароль?', 'На экране входа нажмите «Забыли пароль?» — придёт ссылка для сброса на email.'],
+      ['Как сбросить историю?', 'В разделе «История» нажмите «Очистить всё» — удалятся только сохранённые результаты тестов на этом устройстве.'],
     ];
     faq.innerHTML = '<div class="faq-list">' + items.map(([q, a]) => `
       <div class="faq-item" onclick="toggleFaq(this)">
@@ -333,9 +47,9 @@ function toggleFaq(el) {
   const privacy = document.getElementById('privacyContent');
   if (privacy) {
     privacy.innerHTML = `
-      <div class="ps-card"><span class="ps-icon">🔒</span><div class="ps-text"><strong>Конфиденциальность</strong><span>Данные тестов не передаются третьим лицам</span></div></div>
-      <div class="ps-card"><span class="ps-icon">📱</span><div class="ps-text"><strong>Локально</strong><span>Без регистрации всё остаётся в браузере</span></div></div>
-      <div class="ps-card"><span class="ps-icon">☁️</span><div class="ps-text"><strong>С аккаунтом</strong><span>История синхронизируется в вашей базе на сервере</span></div></div>
+      <div class="ps-card"><span class="ps-icon">🔒</span><div class="ps-text"><strong>Конфиденциальность</strong><span>Данные не отправляются на сервер</span></div></div>
+      <div class="ps-card"><span class="ps-icon">📱</span><div class="ps-text"><strong>Локально</strong><span>История и профиль хранятся только в браузере</span></div></div>
+      <div class="ps-card"><span class="ps-icon">🌐</span><div class="ps-text"><strong>Офлайн</strong><span>После загрузки страницы интернет не обязателен</span></div></div>
       <div class="ps-card"><span class="ps-icon">🧪</span><div class="ps-text"><strong>Не медицина</strong><span>Не является медицинской или психиатрической услугой</span></div></div>`;
   }
 })();
@@ -454,9 +168,9 @@ function showPage(pageId) {
   const navBtn = document.querySelector(`[data-page="${pageId}"]`);
   if (navBtn) navBtn.classList.add('active');
 
-  if (pageId === 'history') { fetchServerHistory().then(() => renderHistory()); }
+  if (pageId === 'history') renderHistory();
   if (pageId === 'zodiac' && !zodiacInitialized) initZodiacPage();
-  if (pageId === 'profile') { fetchServerHistory().then(() => renderProfile()); }
+  if (pageId === 'profile') renderProfile();
 
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -496,50 +210,27 @@ function openTestPanel(id) {
 // HISTORY
 // =============================================
 function getHistory() {
-  if (authToken) return serverHistory;
-  try { return JSON.parse(localStorage.getItem('sk_history') || '[]'); }
+  if (!isLoggedIn()) return [];
+  try { return JSON.parse(sessionStorage.getItem('sk_session_history') || '[]'); }
   catch { return []; }
 }
-async function saveHistory(entry) {
-  if (authToken) {
-    try {
-      const row = await apiCall('/history', 'POST', {
-        type:   entry.type,
-        title:  entry.title,
-        result: entry.result,
-      });
-      serverHistory.unshift({
-        id: String(row.id),
-        type: row.type,
-        title: row.title,
-        result: row.result,
-        date: new Date(row.createdAt).toLocaleString('ru-RU'),
-      });
-    } catch(e) { console.warn('save history failed', e); }
-  } else {
-    const h = JSON.parse(localStorage.getItem('sk_history') || '[]');
-    h.unshift({ ...entry, id: Date.now().toString(), date: new Date().toLocaleString('ru-RU') });
-    localStorage.setItem('sk_history', JSON.stringify(h));
-  }
+function saveHistory(entry) {
+  if (!requireLoginForSave()) return false;
+  const h = getHistory();
+  h.unshift({ ...entry, id: Date.now().toString(), date: new Date().toLocaleString('ru-RU') });
+  sessionStorage.setItem('sk_session_history', JSON.stringify(h));
+  return true;
 }
-async function deleteHistoryItem(id) {
-  if (authToken) {
-    try { await apiCall('/history/' + id, 'DELETE'); } catch {}
-    serverHistory = serverHistory.filter(e => e.id !== id);
-  } else {
-    const h = JSON.parse(localStorage.getItem('sk_history') || '[]').filter(e => e.id !== id);
-    localStorage.setItem('sk_history', JSON.stringify(h));
-  }
+function deleteHistoryItem(id) {
+  if (!isLoggedIn()) return;
+  const h = getHistory().filter(e => e.id !== id);
+  sessionStorage.setItem('sk_session_history', JSON.stringify(h));
   renderHistory();
 }
-async function clearAllHistory() {
+function clearAllHistory() {
+  if (!isLoggedIn()) return;
   if (!confirm('Очистить всю историю результатов?')) return;
-  if (authToken) {
-    try { await apiCall('/history', 'DELETE'); } catch {}
-    serverHistory = [];
-  } else {
-    localStorage.removeItem('sk_history');
-  }
+  sessionStorage.setItem('sk_session_history', '[]');
   renderHistory();
 }
 
@@ -548,6 +239,18 @@ let historySearch = '';
 
 function renderHistory() {
   const cont = document.getElementById('historyContent');
+
+  if (!isLoggedIn()) {
+    cont.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">🔐</div>
+        <h3 class="empty-title">Войдите в аккаунт</h3>
+        <p class="empty-sub">История результатов доступна после входа. Без авторизации данные не сохраняются.</p>
+        <button type="button" class="btn btn-primary" style="margin-top:16px" onclick="showAuthModal('login')">Войти</button>
+      </div>`;
+    return;
+  }
+
   let h = getHistory();
 
   const toolbar = `
@@ -775,7 +478,7 @@ function makeArticleButton(id, title, paragraphs) {
 }
 
 function calcNumerology() {
-  const raw = document.getElementById('birthDateInput').value;
+  const raw = document.getElementById('numDateInput').value;
   const errEl = document.getElementById('numError');
   const briefEl = document.getElementById('numBrief');
   const resEl = document.getElementById('numResult');
@@ -953,19 +656,21 @@ function calcNumerology() {
   resEl.style.display = 'block';
   resEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-  const p = getProfile();
-  p.zodiacDate = raw;
-  p.westSign = westSign.name;
-  p.chSign = chSign.name;
-  saveProfile(p);
+  if (isLoggedIn()) {
+    const p = getProfile();
+    p.zodiacDate = raw;
+    p.westSign = westSign.name;
+    p.chSign = chSign.name;
+    saveProfile(p);
+  }
 }
 
 function saveNumResult(data) {
-  saveHistory({
+  if (!saveHistory({
     type: 'numerology',
-    title: `Матрица Пифагора — ${document.getElementById('birthDateInput').value}`,
+    title: `Матрица Пифагора — ${document.getElementById('numDateInput').value}`,
     result: `Числа: ${data.n1}, ${data.n2}, ${data.n3}, ${data.n4}`,
-  });
+  })) return;
   const btn = document.getElementById('numSaveBtn');
   btn.textContent = '✓ Сохранено';
   btn.disabled = true;
@@ -1116,11 +821,11 @@ function showTempResult(dominant, secondary, scores, maxScore) {
 function saveTempResult(dominant, secondary) {
   const d = TEMP_DESC[dominant];
   const s = secondary ? TEMP_DESC[secondary] : null;
-  saveHistory({
+  if (!saveHistory({
     type: 'temperament',
     title: `Тест темперамента — ${d.name}${s?` / ${s.name}`:''}`,
     result: `Доминирующий тип: ${d.name}`,
-  });
+  })) return;
   const btn = document.getElementById('tempSaveBtn');
   btn.textContent = '✓ Сохранено';
   btn.disabled = true;
@@ -1280,11 +985,11 @@ function showMBTIResult(type, scores) {
 }
 
 function saveMBTIResult(type, nick) {
-  saveHistory({
+  if (!saveHistory({
     type:'mbti',
     title:`MBTI тест — ${type}${nick?` «${nick}»`:''}`,
     result:`Тип личности: ${type}`,
-  });
+  })) return;
   const btn = document.getElementById('mbtiSaveBtn');
   btn.textContent = '✓ Сохранено';
   btn.disabled = true;
@@ -1393,11 +1098,11 @@ function submitBigFiveTest() {
 }
 
 function saveBigFiveResult() {
-  saveHistory({
+  if (!saveHistory({
     type: 'bigfive',
     title: 'Большая пятёрка (OCEAN)',
     result: 'Профиль сохранён — см. детали в разделе',
-  });
+  })) return;
   const btn = document.getElementById('bfSaveBtn');
   btn.textContent = '✓ Сохранено';
   btn.disabled = true;
@@ -1502,11 +1207,11 @@ function submitAttachmentTest() {
 
 function saveAttachmentResult(key) {
   const T = ATTACHMENT_TYPES[key];
-  saveHistory({
+  if (!saveHistory({
     type: 'attachment',
     title: `Привязанность — ${T.name}`,
     result: T.name,
-  });
+  })) return;
   const btn = document.getElementById('attSaveBtn');
   btn.textContent = '✓ Сохранено';
   btn.disabled = true;
@@ -1601,11 +1306,11 @@ function submitEQTest() {
 }
 
 function saveEQResult(label) {
-  saveHistory({
+  if (!saveHistory({
     type: 'eq',
     title: `Эмоциональный интеллект — ${label}`,
     result: label,
-  });
+  })) return;
   const btn = document.getElementById('eqSaveBtn');
   btn.textContent = '✓ Сохранено';
   btn.disabled = true;
@@ -1705,11 +1410,11 @@ function submitLocusTest() {
 
 function saveLocusResult(key) {
   const P = LOCUS_PROFILES[key];
-  saveHistory({
+  if (!saveHistory({
     type: 'locus',
     title: `Локус контроля — ${P.name}`,
     result: P.name,
-  });
+  })) return;
   const btn = document.getElementById('locusSaveBtn');
   btn.textContent = '✓ Сохранено';
   btn.disabled = true;
@@ -1873,22 +1578,26 @@ function calcZodiac() {
   resEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
   // Save to profile
-  const p = getProfile();
-  p.zodiacDate = raw;
-  p.westSign   = westSign.name;
-  p.chSign     = chSign.name;
-  saveProfile(p);
+  if (isLoggedIn()) {
+    const p = getProfile();
+    p.zodiacDate = raw;
+    p.westSign   = westSign.name;
+    p.chSign     = chSign.name;
+    saveProfile(p);
+  }
 }
 
 // =============================================
 // PROFILE / ACCOUNT
 // =============================================
 function getProfile() {
-  try { return JSON.parse(localStorage.getItem('sk_profile') || '{}'); }
+  if (!isLoggedIn()) return {};
+  try { return JSON.parse(sessionStorage.getItem('sk_session_profile') || '{}'); }
   catch { return {}; }
 }
 function saveProfile(data) {
-  localStorage.setItem('sk_profile', JSON.stringify(data));
+  if (!isLoggedIn()) return;
+  sessionStorage.setItem('sk_session_profile', JSON.stringify(data));
 }
 
 const AVATARS = ['🧑','👩','🧔','👱','🧑‍💻','👩‍🎨','🧑‍🚀','👩‍🔬','🧑‍🎓','👩‍💼','🦸','🧙'];
@@ -1925,9 +1634,25 @@ function escapeHtml(str) {
 }
 
 function renderProfile() {
+  const cont = document.getElementById('profileContent');
+
+  if (!isLoggedIn()) {
+    cont.innerHTML = `
+      <div class="glass-card profile-guest-card">
+        <div class="profile-guest-icon">🔐</div>
+        <h3 class="profile-guest-title">Личный кабинет</h3>
+        <p class="profile-guest-text">Войдите или зарегистрируйтесь, чтобы сохранять результаты тестов, нумерологии и собирать портрет личности. Без входа данные не сохраняются.</p>
+        <div class="profile-guest-actions">
+          <button type="button" class="btn btn-primary" onclick="showAuthModal('login')">Войти</button>
+          <button type="button" class="btn btn-secondary" onclick="showAuthModal('register')">Регистрация</button>
+        </div>
+      </div>`;
+    return;
+  }
+
+  const user = getCurrentUser();
   const p   = getProfile();
   const his = getHistory();
-  const cont = document.getElementById('profileContent');
 
   // Gather latest results per type
   const latestMBTI  = his.find(h => h.type === 'mbti');
@@ -1960,14 +1685,8 @@ function renderProfile() {
     historyCount: his.length,
   });
 
-  const avatarEmoji = (currentUser && currentUser.avatar) || p.avatar || '🧑';
-  const userName    = (currentUser && currentUser.name) || p.name || '';
-  const displayEmail = currentUser ? currentUser.email : '';
-  const displayUser  = currentUser ? currentUser.username : '';
-  const emailVerified = currentUser ? !!currentUser.emailVerified : false;
-  const memberSince = currentUser && currentUser.createdAt
-    ? new Date(currentUser.createdAt).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })
-    : '';
+  const avatarEmoji = p.avatar || '🧑';
+  const userName    = p.name || user?.name || user?.username || '';
 
   // Tags row
   const tags = [];
@@ -1981,30 +1700,18 @@ function renderProfile() {
   const daysSince = his.length ? Math.floor((Date.now() - parseInt(his[his.length-1].id||Date.now())) / 86400000) : 0;
 
   cont.innerHTML = `
-    <!-- AUTH STATUS CARD -->
-    ${currentUser ? `
-    <div class="glass-card" style="margin-top:0;border-color:rgba(139,92,246,0.3)">
-      <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
-        <div style="font-size:36px">${currentUser.avatar || '🧑'}</div>
-        <div style="flex:1;min-width:0">
-          <div style="font-size:18px;font-weight:700">${currentUser.name || currentUser.username}</div>
-          <div style="font-size:14px;color:var(--text-muted)">@${escapeHtml(currentUser.username)} · ${escapeHtml(currentUser.email)}</div>
-          <div style="font-size:13px;color:${emailVerified ? '#10b981' : '#f59e0b'};margin-top:3px">${emailVerified ? '✓ Email подтверждён' : '⚠ Подтвердите email'} · История на сервере</div>
-          ${memberSince ? `<div style="font-size:12px;color:var(--text-dim);margin-top:4px">В системе с ${memberSince}</div>` : ''}
+    <div class="glass-card profile-cabinet-head">
+      <div class="profile-cabinet-top">
+        <div>
+          <div class="section-title" style="margin-bottom:4px">Личный кабинет</div>
+          <div class="profile-cabinet-user">${escapeHtml(userName)}</div>
+          <p class="input-hint profile-cabinet-login">@${escapeHtml(user?.username || '')}</p>
         </div>
-        <button class="btn btn-secondary btn-sm" onclick="logout()" style="font-size:13px">Выйти</button>
+        <button type="button" class="btn btn-secondary btn-sm" onclick="logout()">Выйти</button>
       </div>
-    </div>` : `
-    <div class="glass-card" style="margin-top:0;border-color:rgba(251,191,36,0.3);text-align:center;padding:28px">
-      <div style="font-size:32px;margin-bottom:8px">🔐</div>
-      <div style="font-size:17px;font-weight:700;margin-bottom:6px">Войдите для синхронизации</div>
-      <div style="font-size:14px;color:var(--text-muted);margin-bottom:18px">Создайте аккаунт — ваша история будет храниться на сервере и доступна с любого устройства</div>
-      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
-        <button class="btn btn-primary" onclick="showAuthModal('login')">Войти</button>
-        <button class="btn btn-secondary" onclick="showAuthModal('register')">Регистрация</button>
-        <button type="button" class="auth-google-btn profile-guest-google" onclick="loginWithGoogle()">Google</button>
-      </div>
-    </div>`}
+      <p class="profile-account-hint input-hint">Данные текущей сессии сохраняются по кнопке ниже. При выходе несохранённое будет удалено.</p>
+      <button type="button" class="btn btn-primary" id="saveUserDataBtn" onclick="saveUserData()" style="width:100%;margin-top:12px">Сохранить данные</button>
+    </div>
 
     <!-- EDIT CARD -->
     <div class="glass-card profile-edit-card">
@@ -2015,7 +1722,6 @@ function renderProfile() {
         </div>
       </div>
       <button type="button" class="btn btn-secondary btn-sm" style="margin-bottom:12px" onclick="toggleAvatarPicker()">Сменить аватар</button>
-      ${currentUser ? `<p class="input-hint profile-account-hint">Данные аккаунта: ${escapeHtml(displayEmail)} · логин @${escapeHtml(displayUser)}</p>` : ''}
       <label class="field-label">Ваше имя</label>
       <div class="input-row">
         <input type="text" id="profileNameInput" class="input-field" placeholder="Введите имя..." value="${userName}" />
@@ -2058,13 +1764,12 @@ function renderProfile() {
       </div>
     </div>
 
-    ${currentUser ? `
     <div class="glass-card" style="margin-top:0">
-      <div class="section-title">Анализ по истории пользователя</div>
+      <div class="section-title">Анализ по вашей истории</div>
       <div class="portrait-paragraphs">
         ${historyInsights.map(p => `<div class="portrait-p">${p}</div>`).join('')}
       </div>
-    </div>` : ''}
+    </div>
 
     <!-- COMPLETED TESTS SUMMARY -->
     <div class="glass-card" style="margin-top:0">
@@ -2127,15 +1832,44 @@ function toggleAvatarPicker() {
 function selectAvatar(emoji) {
   const p = getProfile(); p.avatar = emoji; saveProfile(p);
   document.getElementById('avatarPicker').style.display = 'none';
-  saveProfileToServer();
   renderProfile();
 }
 
 function saveProfileName() {
   const name = document.getElementById('profileNameInput').value.trim();
   const p = getProfile(); p.name = name; saveProfile(p);
-  saveProfileToServer();
   renderProfile();
+}
+
+function resetAllTests() {
+  tempAnswers = {}; tempInitialized = false;
+  mbtiAnswers = {}; mbtiInitialized = false;
+  bfAnswers = {}; bfInitialized = false;
+  attAnswers = {}; attInitialized = false;
+  eqAnswers = {}; eqInitialized = false;
+  locusAnswers = {}; locusInitialized = false;
+  ennAnswers = {}; ennInitialized = false;
+  llAnswers = {}; llInitialized = false;
+  seAnswers = {}; seInitialized = false;
+  zodiacInitialized = false;
+
+  const clears = [
+    ['tempTest', 'tempResult'], ['mbtiTest', 'mbtiResult'], ['bfTest', 'bfResult'],
+    ['attTest', 'attResult'], ['eqTest', 'eqResult'], ['locusTest', 'locusResult'],
+    ['ennTest', 'ennResult'], ['llTest', 'llResult'], ['seTest', 'seResult'],
+    ['humorTest'], ['numResult', 'numError'], ['zodiacResult', 'zodiacError'],
+  ];
+  clears.forEach(([testId, resultId]) => {
+    const t = document.getElementById(testId);
+    if (t) t.innerHTML = '';
+    if (resultId) {
+      const r = document.getElementById(resultId);
+      if (r) { r.innerHTML = ''; r.style.display = 'none'; }
+    }
+  });
+  const numRes = document.getElementById('numResult');
+  if (numRes) numRes.style.display = 'none';
+  backToTestsHub();
 }
 
 // =============================================
@@ -2607,7 +2341,7 @@ function showEnnResult(type, scores) {
 
 function saveEnnResult(type) {
   const info = ENNEAGRAM_TYPES[type];
-  saveHistory({ type: 'enneagram', title: `Эннеаграмма — Тип ${type} (${info.name})`, result: `${info.emoji} ${info.name}` });
+  if (!saveHistory({ type: 'enneagram', title: `Эннеаграмма — Тип ${type} (${info.name})`, result: `${info.emoji} ${info.name}` })) return;
   const btn = document.getElementById('ennSaveBtn');
   if (btn) { btn.textContent = '✓ Сохранено'; btn.disabled = true; btn.classList.replace('btn-primary', 'btn-secondary'); }
 }
@@ -2735,7 +2469,7 @@ function showLLResult(primary, secondary, scores) {
 
 function saveLLResult(primary) {
   const info = LOVE_LANG_TYPES[primary];
-  saveHistory({ type: 'lovelang', title: `Языки любви — ${info.name}`, result: `${info.emoji} ${info.name}` });
+  if (!saveHistory({ type: 'lovelang', title: `Языки любви — ${info.name}`, result: `${info.emoji} ${info.name}` })) return;
   const btn = document.getElementById('llSaveBtn');
   if (btn) { btn.textContent = '✓ Сохранено'; btn.disabled = true; btn.classList.replace('btn-primary', 'btn-secondary'); }
 }
@@ -2872,7 +2606,7 @@ function showSEResult(score) {
 }
 
 function saveSEResult(score, level) {
-  saveHistory({ type: 'selfesteem', title: `Самооценка Розенберга — ${level}`, result: `Балл: ${score}/40` });
+  if (!saveHistory({ type: 'selfesteem', title: `Самооценка Розенберга — ${level}`, result: `Балл: ${score}/40` })) return;
   const btn = document.getElementById('seSaveBtn');
   if (btn) { btn.textContent = '✓ Сохранено'; btn.disabled = true; btn.classList.replace('btn-primary', 'btn-secondary'); }
 }
