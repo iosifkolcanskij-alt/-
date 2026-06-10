@@ -59,7 +59,7 @@ function Sync-Once {
 Ensure-GitRepo
 
 if ($Watch) {
-    Write-Host "Наблюдение за папкой: $Root (интервал ${IntervalSeconds}с). Ctrl+C — остановка."
+    Write-Host "Watching folder: $Root (interval ${IntervalSeconds}s). Ctrl+C to stop."
     while ($true) {
         Sync-Once
         Start-Sleep -Seconds $IntervalSeconds
