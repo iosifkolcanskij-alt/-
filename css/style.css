@@ -3212,6 +3212,12 @@ body {
     --nav-h: 64px;
   }
 
+  html,
+  body {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+
   body {
     font-size: 16px;
     -webkit-tap-highlight-color: transparent;
@@ -3222,6 +3228,8 @@ body {
     top: 0;
     left: 0;
     right: 0;
+    width: 100%;
+    max-width: 100vw;
     z-index: 1000;
     padding-top: env(safe-area-inset-top, 0px);
     height: calc(var(--header-h) + env(safe-area-inset-top, 0px));
@@ -3229,6 +3237,7 @@ body {
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
     isolation: isolate;
+    pointer-events: none;
   }
 
   [data-theme="light"] .header {
@@ -3244,20 +3253,22 @@ body {
     position: relative;
     height: var(--header-h);
     width: 100%;
-    max-width: none;
+    max-width: 100vw;
     margin: 0;
     padding: 0;
+    pointer-events: none;
   }
 
   .logo {
-    position: absolute;
+    position: fixed;
     left: max(12px, env(safe-area-inset-left, 0px));
-    top: 50%;
+    top: calc(env(safe-area-inset-top, 0px) + var(--header-h) / 2);
     transform: translateY(-50%);
-    z-index: 2;
+    z-index: 1001;
     max-width: none;
     flex: none;
     overflow: visible;
+    pointer-events: auto;
   }
 
   .logo-text {
@@ -3270,14 +3281,14 @@ body {
   }
 
   .header-actions {
-    position: absolute;
-    right: max(10px, env(safe-area-inset-right, 0px));
-    top: 50%;
+    position: fixed;
+    right: max(12px, env(safe-area-inset-right, 0px));
+    top: calc(env(safe-area-inset-top, 0px) + var(--header-h) / 2);
     transform: translateY(-50%);
     display: flex !important;
     align-items: center;
-    gap: 6px;
-    z-index: 3;
+    gap: 8px;
+    z-index: 1001;
     margin: 0;
     flex: none;
     visibility: visible !important;
@@ -3289,15 +3300,18 @@ body {
     display: inline-flex !important;
     align-items: center;
     justify-content: center;
-    padding: 7px 12px;
+    padding: 8px 14px;
     font-size: 13px;
     font-weight: 600;
-    max-width: 96px;
+    max-width: none;
+    min-height: 38px;
     flex-shrink: 0;
+    white-space: nowrap;
     background: #ffffff !important;
-    border: 1px solid rgba(37, 99, 235, 0.35) !important;
-    color: #1d4ed8 !important;
-    box-shadow: 0 1px 4px rgba(37, 99, 235, 0.1);
+    border: 1px solid rgba(37, 99, 235, 0.3) !important;
+    border-radius: 8px !important;
+    color: #1e40af !important;
+    box-shadow: none;
     -webkit-appearance: none;
     appearance: none;
   }
@@ -3306,13 +3320,15 @@ body {
     display: flex !important;
     align-items: center;
     justify-content: center;
-    width: 36px;
-    height: 36px;
-    font-size: 16px;
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    font-size: 17px;
     flex-shrink: 0;
     background: #ffffff !important;
-    border: 1px solid rgba(37, 99, 235, 0.35) !important;
-    box-shadow: 0 1px 4px rgba(37, 99, 235, 0.1);
+    border: 1px solid rgba(37, 99, 235, 0.3) !important;
+    border-radius: 50% !important;
+    box-shadow: none;
     -webkit-appearance: none;
     appearance: none;
   }
@@ -3326,6 +3342,12 @@ body {
   [data-theme="dark"] .theme-toggle {
     background: rgba(20, 35, 70, 0.95) !important;
     border-color: rgba(96, 165, 250, 0.4) !important;
+  }
+
+  /* На главной hero-glow не должен раздвигать страницу и лезть под шапку */
+  #page-home .hero-glow,
+  #page-home .hero-glow2 {
+    display: none !important;
   }
 
   /* Нижняя навигация — удобнее для большого пальца */
@@ -3392,10 +3414,10 @@ body {
 
   /* Солнце не перекрывает кнопки в шапке */
   .ds-sun {
-    top: 18%;
-    right: 6%;
-    width: 72px;
-    height: 72px;
+    top: 22%;
+    right: 4%;
+    width: 64px;
+    height: 64px;
   }
 
   .page-header {
