@@ -57,7 +57,7 @@ function toggleFaq(el) {
 // =============================================
 // THEME
 // =============================================
-let currentTheme = localStorage.getItem('theme') || 'dark';
+let currentTheme = localStorage.getItem('theme') || 'light';
 document.body.setAttribute('data-theme', currentTheme);
 document.getElementById('themeIcon').textContent = currentTheme === 'dark' ? '☀️' : '🌙';
 
@@ -204,6 +204,7 @@ function openTestPanel(id) {
   if (id === 'attachment' && !attInitialized) initAttachmentTest();
   if (id === 'eq' && !eqInitialized) initEQTest();
   if (id === 'locus' && !locusInitialized) initLocusTest();
+  if (id === 'humor' && !humorInitialized) initHumorTest();
 }
 
 // =============================================
@@ -1852,6 +1853,7 @@ function resetAllTests() {
   llAnswers = {}; llInitialized = false;
   seAnswers = {}; seInitialized = false;
   zodiacInitialized = false;
+  humorInitialized = false;
 
   const clears = [
     ['tempTest', 'tempResult'], ['mbtiTest', 'mbtiResult'], ['bfTest', 'bfResult'],

@@ -266,11 +266,14 @@ var HUMOR_RESULTS_MEN = {
   '100111': 'одарённый представитель богемы'
 };
 
+var humorInitialized = false;
+
 function initHumorTest() {
   humorGender = null;
   humorBlockAnswers = [];
   humorCurrentBlock = 0;
   humorBlockResults = [];
+  humorInitialized = true;
   renderHumorGenderSelect();
 }
 

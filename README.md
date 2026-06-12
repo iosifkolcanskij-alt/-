@@ -2,29 +2,6 @@
 
 Репозиторий: https://github.com/iosifkolcanskij-alt/-
 
-## Синхронизация с GitHub
-
-Один раз отправить все файлы:
-
-```powershell
-powershell -ExecutionPolicy Bypass -File scripts\sync-to-github.ps1
-```
-
-Автоматически отправлять каждые 2 минуты при изменениях:
-
-```powershell
-powershell -ExecutionPolicy Bypass -File scripts\sync-to-github.ps1 -Watch
-```
-
-Фоновая задача Windows (каждые 5 минут, PowerShell от администратора):
-
-```powershell
-powershell -ExecutionPolicy Bypass -File scripts\install-auto-sync-task.ps1
-```
-
-При первом `push` GitHub запросит логин и **Personal Access Token** (не пароль аккаунта):  
-GitHub → Settings → Developer settings → Personal access tokens → Generate new token (scope `repo`).
-
 Секреты (`api/config.local.php`, база SQLite, логи) в репозиторий не попадают — см. `.gitignore`.
 
 ## Запуск сайта

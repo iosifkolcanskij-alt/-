@@ -1,0 +1,19 @@
+{
+  "name": "Самопознание — Нумерология и Психотесты",
+  "short_name": "Самопознание",
+  "description": "Нумерология, психологические тесты и инструменты самопознания",
+  "start_url": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#eef6ff",
+  "theme_color": "#2563eb",
+  "lang": "ru",
+  "icons": [
+    {
+      "src": "icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
