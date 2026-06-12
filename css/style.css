@@ -115,7 +115,6 @@ input { font-family: inherit; }
   line-height: 1.45;
 }
 
-.header,
 .nav,
 .main {
   position: relative;
@@ -282,6 +281,8 @@ input { font-family: inherit; }
 }
 .nav-icon { font-size: 18px; line-height: 1; }
 .nav-label { font-size: 16px; }
+.nav-label-short { display: none; }
+.nav-label-full { display: inline; }
 
 /* ============================
    ОСНОВНАЯ ОБЛАСТЬ / СТРАНИЦЫ
@@ -3207,8 +3208,8 @@ body {
    ============================ */
 @media (max-width: 768px) {
   :root {
-    --header-h: 56px;
-    --nav-h: 62px;
+    --header-h: 52px;
+    --nav-h: 64px;
   }
 
   body {
@@ -3217,27 +3218,50 @@ body {
   }
 
   .header {
-    padding-top: env(safe-area-inset-top, 0);
-    height: calc(var(--header-h) + env(safe-area-inset-top, 0));
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    padding-top: env(safe-area-inset-top, 0px);
+    height: calc(var(--header-h) + env(safe-area-inset-top, 0px));
+    overflow: visible;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    isolation: isolate;
+  }
+
+  [data-theme="light"] .header {
+    background: #f8fcff !important;
+    box-shadow: 0 1px 0 rgba(37, 99, 235, 0.12) !important;
+  }
+
+  [data-theme="dark"] .header {
+    background: rgba(5, 12, 28, 0.98) !important;
   }
 
   .header-inner {
-    padding: 0 max(12px, env(safe-area-inset-right, 0)) 0 max(12px, env(safe-area-inset-left, 0));
-    gap: 8px;
-    min-width: 0;
+    position: relative;
+    height: var(--header-h);
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0;
   }
 
   .logo {
-    flex: 1 1 auto;
-    min-width: 0;
-    overflow: hidden;
+    position: absolute;
+    left: max(12px, env(safe-area-inset-left, 0px));
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    max-width: none;
+    flex: none;
+    overflow: visible;
   }
 
   .logo-text {
-    font-size: 17px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    display: none;
   }
 
   .logo-icon {
@@ -3246,22 +3270,62 @@ body {
   }
 
   .header-actions {
+    position: absolute;
+    right: max(10px, env(safe-area-inset-right, 0px));
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex !important;
+    align-items: center;
     gap: 6px;
-    flex-shrink: 0;
+    z-index: 3;
+    margin: 0;
+    flex: none;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto;
   }
 
   .auth-header-btn {
-    padding: 8px 14px;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    padding: 7px 12px;
     font-size: 13px;
-    max-width: 140px;
+    font-weight: 600;
+    max-width: 96px;
     flex-shrink: 0;
+    background: #ffffff !important;
+    border: 1px solid rgba(37, 99, 235, 0.35) !important;
+    color: #1d4ed8 !important;
+    box-shadow: 0 1px 4px rgba(37, 99, 235, 0.1);
+    -webkit-appearance: none;
+    appearance: none;
   }
 
   .theme-toggle {
-    width: 40px;
-    height: 40px;
-    font-size: 18px;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
     flex-shrink: 0;
+    background: #ffffff !important;
+    border: 1px solid rgba(37, 99, 235, 0.35) !important;
+    box-shadow: 0 1px 4px rgba(37, 99, 235, 0.1);
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  [data-theme="dark"] .auth-header-btn {
+    background: rgba(20, 35, 70, 0.95) !important;
+    border-color: rgba(96, 165, 250, 0.4) !important;
+    color: #eef6ff !important;
+  }
+
+  [data-theme="dark"] .theme-toggle {
+    background: rgba(20, 35, 70, 0.95) !important;
+    border-color: rgba(96, 165, 250, 0.4) !important;
   }
 
   /* Нижняя навигация — удобнее для большого пальца */
@@ -3276,19 +3340,20 @@ body {
   }
 
   .nav-inner {
-    padding: 4px 2px;
+    padding: 4px max(4px, env(safe-area-inset-left, 0px)) 4px max(4px, env(safe-area-inset-right, 0px));
     gap: 0;
-    justify-content: space-around;
+    justify-content: space-between;
     overflow-x: visible;
   }
 
   .nav-item {
-    flex: 1;
+    flex: 1 1 0;
+    min-width: 0;
     flex-direction: column;
     justify-content: center;
-    gap: 2px;
-    padding: 6px 2px;
-    min-height: 52px;
+    gap: 3px;
+    padding: 5px 1px;
+    min-height: 54px;
     border-radius: 10px;
   }
 
@@ -3306,18 +3371,31 @@ body {
 
   .nav-label {
     display: block;
-    font-size: 9px;
+    font-size: clamp(8px, 2.35vw, 10px);
     font-weight: 700;
-    line-height: 1.1;
-    max-width: 58px;
+    line-height: 1.15;
+    width: 100%;
+    max-width: none;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     text-align: center;
+    padding: 0 1px;
   }
 
+  .nav-label-full { display: none; }
+  .nav-label-short { display: inline; }
+
   .main {
-    padding: calc(var(--header-h) + env(safe-area-inset-top, 0) + 16px) 14px calc(var(--nav-h) + env(safe-area-inset-bottom, 0) + 20px);
+    padding: calc(var(--header-h) + env(safe-area-inset-top, 0px) + 16px) 14px calc(var(--nav-h) + env(safe-area-inset-bottom, 0px) + 16px);
+  }
+
+  /* Солнце не перекрывает кнопки в шапке */
+  .ds-sun {
+    top: 18%;
+    right: 6%;
+    width: 72px;
+    height: 72px;
   }
 
   .page-header {
@@ -3810,21 +3888,10 @@ body {
   }
 }
 
-@media (max-width: 520px) {
-  .logo-text {
-    display: none;
-  }
-}
-
 @media (max-width: 400px) {
   .auth-header-btn {
-    padding: 8px 12px;
-    font-size: 13px;
-  }
-
-  .nav-label {
-    font-size: 8px;
-    max-width: 48px;
+    padding: 7px 10px;
+    font-size: 12px;
   }
 
   .hero-tags {
@@ -3947,9 +4014,5 @@ body {
   body {
     overscroll-behavior-y: contain;
     -webkit-overflow-scrolling: touch;
-  }
-
-  .header {
-    padding-top: env(safe-area-inset-top, 0);
   }
 }
